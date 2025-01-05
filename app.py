@@ -16,8 +16,9 @@ class Task(db.Model):
 # Startseite anzeigen
 @app.route('/')
 def index():
-    tasks = Task.query.all()
-    return render_template('index.html', tasks=tasks)
+    tasks = db.session.query(Task).filter_by(complete=False).all()
+    completed = db.session.query(Task).filter_by(complete=True).all()
+    return render_template('index.html', tasks=tasks, completed=completed)
 
 # Aufgabe hinzufügen
 @app.route('/add', methods=['POST'])
@@ -36,6 +37,31 @@ def delete_task(task_id):
     db.session.delete(task)
     db.session.commit()
     return jsonify({"message": "Task deleted!"}), 200
+
+# Aufgabe erledigen
+@app.route('/update/<int:task_id>', methods=['POST'])
+def update_task(task_id):
+    task = Task.query.get_or_404(task_id)
+
+    print(task)
+
+    new_complete = request.form.get('complete')
+
+    print(type(new_complete))
+    
+    if new_complete == "True":   
+        print("Task completed")
+        task.complete=True
+        db.session.commit()
+        return jsonify({"message": "Task completed!"}), 200
+    else:
+        print("Task restored")
+        task.complete=False
+        db.session.commit()
+        return jsonify({"message": "Task restored!"}), 200
+    
+
+
 
 if __name__ == '__main__':
     dbfile=Path("./todo.db")

@@ -13,11 +13,21 @@
     <input type="text" id="taskInput" placeholder="Neue Aufgabe">
     <button onclick="addTask()">Hinzufügen</button>
 
-    <ul id="taskList">
+    <ul id="taskList">Zu erledigen
         {% for task in tasks %}
             <li id="task-{{ task.id }}">
                 {{ task.title }}
                 <button onclick="deleteTask({{ task.id }})">Löschen</button>
+                <button onclick="completeTask({{ task.id }})">Erledigen</button>
+            </li>
+        {% endfor %}
+    </ul>
+    <ul id="completedTaskList">Erledigt
+        {% for task in completed %}
+            <li id="task-{{ task.id }}">
+                {{ task.title }}
+                <button onclick="deleteTask({{ task.id }})">Löschen</button>
+                <button onclick="restoreTask({{ task.id }})">Wiederherstellen</button>
             </li>
         {% endfor %}
     </ul>
