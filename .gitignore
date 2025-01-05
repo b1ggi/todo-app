@@ -1,0 +1,9 @@
+#Virtuelle Umgebung
+venv/
+#Caches und Logs
+__pycache__/
+*.log
+.DS_Store
+#VS Code
+todo-app.code-workspace
+test
