@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do Liste</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>To-Do Liste</h1>
+
+    <!-- Aufgaben hinzufügen -->
+    <input type="text" id="taskInput" placeholder="Neue Aufgabe">
+    <button onclick="addTask()">Hinzufügen</button>
+
+    <ul id="taskList">
+        {% for task in tasks %}
+            <li id="task-{{ task.id }}">
+                {{ task.title }}
+                <button onclick="deleteTask({{ task.id }})">Löschen</button>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
