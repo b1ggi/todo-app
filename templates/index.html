@@ -2,30 +2,41 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta content='yes' name='apple-mobile-web-app-capable'/>
+    <meta content='yes' name='mobile-web-app-capable'/> 
     <title>To-Do Liste</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>To-Do Liste</h1>
+    <h1>To-Do</h1>
 
     <!-- Aufgaben hinzufügen -->
-    <input type="text" id="taskInput" placeholder="Neue Aufgabe">
-    <button onclick="addTask()">Hinzufügen</button>
+    <div style="text-align: center;">
+        <input maxlength="100" type="text" id="taskInput" placeholder="Neue Aufgabe" style="padding: 10px; ">
+    </div>
 
-    <ul id="taskList">Zu erledigen
+    <br><h3>Zu erledigen</h3><ul id="taskList">
         {% for task in tasks %}
             <li id="task-{{ task.id }}">
-                {{ task.title }}
+                <div>
+                <span id="task-title-{{ task.id }}">{{ task.title }}</span>
+                <input maxlength="100" type="text" id="edit-task-input-{{ task.id }}" style="display:none;" placeholder="Titel">
+                </div>
+                <br>
+                <button onclick="editTask({{ task.id }})">Bearbeiten</button>
                 <button onclick="deleteTask({{ task.id }})">Löschen</button>
                 <button onclick="completeTask({{ task.id }})">Erledigen</button>
             </li>
         {% endfor %}
     </ul>
-    <ul id="completedTaskList">Erledigt
+    <br><h3>Erledigt</h3><ul id="completedTaskList">
         {% for task in completed %}
             <li id="task-{{ task.id }}">
-                {{ task.title }}
+                <div>
+                <span>{{ task.title }}</span>
+                </div>
+                <br>
                 <button onclick="deleteTask({{ task.id }})">Löschen</button>
                 <button onclick="restoreTask({{ task.id }})">Wiederherstellen</button>
             </li>
