@@ -4,21 +4,7 @@
 A simple to-do list web application built with **Flask** and **SQLAlchemy**.
 It allows users to **add**, **delete**, and **update** tasks.
 
----
-
-## 🗂️ Project Structure
-
-
-app.py               # Main application file
-instance/            # Folder containing the SQLite database
-requirements.txt     # Python requirements
-static/              # Folder for JS & CSS files
-    app.js           # JavaScript logic
-    style.css        # CSS styles
-templates/           # Folder for HTML templates
-    index.html       # Main HTML file
-
-
+```
 ---
 
 ## 🛠️ Requirements
@@ -41,9 +27,8 @@ The application requires the following Python packages:
 
 Install them via:
 
-```bash
 pip install -r requirements.txt
-```
+
 
 ---
 
