@@ -28,8 +28,9 @@ The application requires the following Python packages:
 
 Install them via:
 
+```bash
 pip install -r requirements.txt
-
+```
 
 ---
 
