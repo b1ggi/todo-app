@@ -38,30 +38,29 @@ def delete_task(task_id):
     db.session.commit()
     return jsonify({"message": "Task deleted!"}), 200
 
-# Aufgabe erledigen
+# Aufgabe ändern
 @app.route('/update/<int:task_id>', methods=['POST'])
 def update_task(task_id):
     task = Task.query.get_or_404(task_id)
 
-    print(task)
-
     new_complete = request.form.get('complete')
-
-    print(type(new_complete))
+    new_title = request.form.get('title')
     
-    if new_complete == "True":   
-        print("Task completed")
+    if new_complete == "True":
         task.complete=True
         db.session.commit()
         return jsonify({"message": "Task completed!"}), 200
-    else:
+    elif new_complete == "False":
         print("Task restored")
         task.complete=False
         db.session.commit()
         return jsonify({"message": "Task restored!"}), 200
-    
-
-
+    elif new_title:
+        task.title = new_title
+        db.session.commit()
+        return jsonify({"message": "Title updated!"}), 200
+    else:
+        return jsonify({"message": "No update provided!"}), 400
 
 if __name__ == '__main__':
     dbfile=Path("./todo.db")

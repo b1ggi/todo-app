@@ -7,25 +7,35 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>To-Do Liste</h1>
+    <h1>To-Do</h1>
 
     <!-- Aufgaben hinzufügen -->
-    <input type="text" id="taskInput" placeholder="Neue Aufgabe">
-    <button onclick="addTask()">Hinzufügen</button>
+    <div style="text-align: center;">
+        <input maxlength="100" type="text" id="taskInput" placeholder="Neue Aufgabe">
+        <button onclick="addTask()" style="margin-top: 10px">Hinzufügen</button>
+    </div>
 
-    <ul id="taskList">Zu erledigen
+    <ul id="taskList"><h3>Zu erledigen</h3>
         {% for task in tasks %}
             <li id="task-{{ task.id }}">
-                {{ task.title }}
+                <div>
+                <span  id="task-title-{{ task.id }}" style="max-width: 100%; display: inline-block; overflow: hidden; text-overflow: ellipsis;">{{ task.title }}</span>
+                <input maxlength="100" type="text" id="edit-task-input-{{ task.id }}" style="display:none;">
+                </div>
+                <br>
+                <button onclick="editTask({{ task.id }})">Bearbeiten</button>
                 <button onclick="deleteTask({{ task.id }})">Löschen</button>
                 <button onclick="completeTask({{ task.id }})">Erledigen</button>
             </li>
         {% endfor %}
     </ul>
-    <ul id="completedTaskList">Erledigt
+    <br><ul id="completedTaskList"><h3>Erledigt</h3>
         {% for task in completed %}
             <li id="task-{{ task.id }}">
-                {{ task.title }}
+                <div>
+                <span style="max-width: 100%; display: inline-block; overflow: hidden; text-overflow: ellipsis;">{{ task.title }}</span>
+                </div>
+                <br>
                 <button onclick="deleteTask({{ task.id }})">Löschen</button>
                 <button onclick="restoreTask({{ task.id }})">Wiederherstellen</button>
             </li>
