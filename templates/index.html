@@ -16,7 +16,7 @@
         <input maxlength="100" type="text" id="taskInput" placeholder="Neue Aufgabe" style="padding: 10px; ">
     </div>
 
-    <br><ul id="taskList"><h3>Zu erledigen</h3>
+    <br><h3>Zu erledigen</h3><ul id="taskList">
         {% for task in tasks %}
             <li id="task-{{ task.id }}">
                 <div>
@@ -30,7 +30,7 @@
             </li>
         {% endfor %}
     </ul>
-    <br><ul id="completedTaskList"><h3>Erledigt</h3>
+    <br><h3>Erledigt</h3><ul id="completedTaskList">
         {% for task in completed %}
             <li id="task-{{ task.id }}">
                 <div>
