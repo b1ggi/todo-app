@@ -4,7 +4,8 @@
 A simple to-do list web application built with **Flask** and **SQLAlchemy**.
 It allows users to **add**, **delete**, and **update** tasks.
 
-![image](https://github.com/user-attachments/assets/2bcc7acf-dbbd-4a5b-bef3-d0957760c75f)
+![image](https://github.com/user-attachments/assets/68f1436d-77fe-4d24-a6b5-426aa41625b3)
+
 
 
 
