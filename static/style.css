@@ -10,13 +10,11 @@ h1 {
 }
 
 input[type="text"] {
-    width: 80%;
-    padding: 8px;
+    font-size: 16px;
 }
 
 button {
     padding: 8px;
-    margin-left: 10px;
 }
 
 ul {
@@ -26,4 +24,13 @@ ul {
 
 li {
     margin: 10px 0;
+    background-color: rgb(192, 192, 192);
+    padding: 10px;
+}
+
+span {
+    max-width: 100%;
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
