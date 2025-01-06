@@ -11,7 +11,7 @@
 
     <!-- Aufgaben hinzufügen -->
     <div style="text-align: center;">
-        <input maxlength="100" type="text" id="taskInput" placeholder="Neue Aufgabe" style="padding: 10px; display: inline-block;">
+        <input maxlength="100" type="text" id="taskInput" placeholder="Neue Aufgabe" style="padding: 10px; ">
     </div>
 
     <br><ul id="taskList"><h3>Zu erledigen</h3>
@@ -19,7 +19,7 @@
             <li id="task-{{ task.id }}">
                 <div>
                 <span id="task-title-{{ task.id }}">{{ task.title }}</span>
-                <input maxlength="100" type="text" id="edit-task-input-{{ task.id }}" style="display:none; padding: 10px;" placeholder="Titel">
+                <input maxlength="100" type="text" id="edit-task-input-{{ task.id }}" style="display:none;" placeholder="Titel">
                 </div>
                 <br>
                 <button onclick="editTask({{ task.id }})">Bearbeiten</button>
