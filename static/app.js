@@ -38,8 +38,12 @@ function deleteTask(taskId) {
 function editTask(taskId) {
     const taskTitleElement = document.getElementById(`task-title-${taskId}`);
     const editInputElement = document.getElementById(`edit-task-input-${taskId}`);
-    
+
     if (editInputElement.style.display === 'none') {
+        editInputElement.value = taskTitleElement.textContent;
+        taskTitleElement.style.display = 'none';
+        editInputElement.style.display = 'inline';
+        editInputElement.focus();  // Focus the input field when it is displayed
         editInputElement.value = taskTitleElement.textContent;
         taskTitleElement.style.display = 'none';
         editInputElement.style.display = 'inline';
