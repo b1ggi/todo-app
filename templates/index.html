@@ -11,16 +11,15 @@
 
     <!-- Aufgaben hinzufügen -->
     <div style="text-align: center;">
-        <input style="width: 81.3%;" maxlength="100" type="text" id="taskInput" placeholder="Neue Aufgabe">
-        <button   onclick="addTask()" style="margin-top: 10px">Hinzufügen</button>
+        <input maxlength="100" type="text" id="taskInput" placeholder="Neue Aufgabe" style="padding: 10px; display: inline-block;">
     </div>
 
     <br><ul id="taskList"><h3>Zu erledigen</h3>
         {% for task in tasks %}
-            <li id="task-{{ task.id }}" style="background-color: rgb(192, 192, 192); padding: 10px;">
+            <li id="task-{{ task.id }}">
                 <div>
-                <span id="task-title-{{ task.id }}" style="max-width: 100%; display: inline-block; overflow: hidden; text-overflow: ellipsis;">{{ task.title }}</span>
-                <input maxlength="100" type="text" id="edit-task-input-{{ task.id }}" style="display:none;" placeholder="Titel">
+                <span id="task-title-{{ task.id }}">{{ task.title }}</span>
+                <input maxlength="100" type="text" id="edit-task-input-{{ task.id }}" style="display:none; padding: 10px;" placeholder="Titel">
                 </div>
                 <br>
                 <button onclick="editTask({{ task.id }})">Bearbeiten</button>
@@ -31,9 +30,9 @@
     </ul>
     <br><ul id="completedTaskList"><h3>Erledigt</h3>
         {% for task in completed %}
-            <li id="task-{{ task.id }}" style="background-color: rgb(192, 192, 192); padding: 10px;">
+            <li id="task-{{ task.id }}">
                 <div>
-                <span style="max-width: 100%; display: inline-block; overflow: hidden; text-overflow: ellipsis;">{{ task.title }}</span>
+                <span>{{ task.title }}</span>
                 </div>
                 <br>
                 <button onclick="deleteTask({{ task.id }})">Löschen</button>
