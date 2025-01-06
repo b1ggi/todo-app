@@ -1,11 +1,12 @@
-```markdown
+
 # To-Do List Application
 
 A simple to-do list web application built with **Flask** and **SQLAlchemy**.
 It allows users to **add**, **delete**, and **update** tasks.
 
-```
----
+![image](https://github.com/user-attachments/assets/94628143-ca3f-4b10-b0ad-0512378c239b)
+
+
 
 ## 🛠️ Requirements
 
