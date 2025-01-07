@@ -12,3 +12,6 @@ todo-app.code-workspace
 .vscode/
 #Instance
 instance/
+
+#Temp
+temp/
