@@ -13,6 +13,11 @@ on:
   release:
     types: [published]
   workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version of the release'
+        required: true
+        default: 'latest'
     
 
 jobs:
@@ -46,7 +51,7 @@ jobs:
         uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
         with:
           images: |
-            docker.io/b1ggi/todo-app:${{ github.ref_name }}
+            b1ggi/todo-app:${{ github.ref_name }}
             ghcr.io/${{ github.repository }}:${{ github.ref_name }}
 
       - name: Build and push Docker images
