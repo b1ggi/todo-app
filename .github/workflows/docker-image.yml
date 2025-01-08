@@ -47,7 +47,7 @@ jobs:
         with:
           images: |
             docker.io/b1ggi/todo-app
-            ghcr.io/todo-app
+            ghcr.io/b1ggi/todo-app
 
       - name: Build and push Docker images
         id: push
