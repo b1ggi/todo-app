@@ -33,3 +33,4 @@ RUN python /app/init_db.py
 CMD ["gunicorn", "--bind", "0.0.0.0:5000", "app:app"]
 
 HEALTHCHECK --interval=30s --timeout=10s --retries=3 CMD wget --no-verbose --tries=1 --spider http://127.0.0.1:5000/ || exit 1
+LABEL org.opencontainers.image.source https://github.com/b1ggi/todo-app
