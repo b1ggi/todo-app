@@ -7,9 +7,10 @@
     <meta content='yes' name='mobile-web-app-capable'/> 
     <title>To-Do Liste</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
 </head>
 <body>
-    <h1>To-Do</h1>
+    <img src="{{ url_for('static', filename='icon.png') }}" alt="Logo" style="width: 100px; display: block; margin: 0 auto; margin-bottom: 20px;">
 
     <!-- Aufgaben hinzufügen -->
     <div style="text-align: center;">

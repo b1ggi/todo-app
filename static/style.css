@@ -5,10 +5,6 @@ body {
     padding: 20px;
 }
 
-h1 {
-    text-align: center;
-}
-
 input[type="text"] {
     font-size: 16px;
 }

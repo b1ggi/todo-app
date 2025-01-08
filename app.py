@@ -12,6 +12,7 @@ class Task(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
     complete = db.Column(db.Boolean, default=False)
+    body = db.Column(db.Text, nullable=True)
 
 # Startseite anzeigen
 @app.route('/')
@@ -24,8 +25,9 @@ def index():
 @app.route('/add', methods=['POST'])
 def add_task():
     title = request.form.get('title')
+    body = request.form.get('body')
     if title:
-        new_task = Task(title=title)
+        new_task = Task(title=title, body=body)
         db.session.add(new_task)
         db.session.commit()
     return jsonify({"message": "Task added!"}), 200
@@ -45,13 +47,13 @@ def update_task(task_id):
 
     new_complete = request.form.get('complete')
     new_title = request.form.get('title')
+    new_body = request.form.get('body')
     
     if new_complete == "True":
         task.complete=True
         db.session.commit()
         return jsonify({"message": "Task completed!"}), 200
     elif new_complete == "False":
-        print("Task restored")
         task.complete=False
         db.session.commit()
         return jsonify({"message": "Task restored!"}), 200
@@ -59,6 +61,10 @@ def update_task(task_id):
         task.title = new_title
         db.session.commit()
         return jsonify({"message": "Title updated!"}), 200
+    elif new_body:
+        task.body = new_body
+        db.session.commit()
+        return jsonify({"message": "Body updated!"}), 200
     else:
         return jsonify({"message": "No update provided!"}), 400
 
