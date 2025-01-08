@@ -1,0 +1,6 @@
+.git
+.venv
+__pycache__
+instance
+temp
+todo-app.code-workspace
