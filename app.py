@@ -1,11 +1,13 @@
 from flask import Flask, render_template, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
-from pathlib import Path
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///todo.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
+
+with app.app_context():
+            db.create_all() 
 
 # Model für To-Do-Aufgaben
 class Task(db.Model):
@@ -69,8 +71,4 @@ def update_task(task_id):
         return jsonify({"message": "No update provided!"}), 400
 
 if __name__ == '__main__':
-    dbfile=Path("./todo.db")
-    if not dbfile.exists():
-        with app.app_context():
-            db.create_all() 
     app.run(debug=True, host="0.0.0.0")
