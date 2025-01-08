@@ -61,8 +61,8 @@ jobs:
           context: .
           push: true
           tags: |
-            b1ggi/todo-app:${{ github.event.inputs.version }}  # Use input version tag
-            ghcr.io/${{ github.repository }}:${{ github.event.inputs.version }}  # Use input version tag for GHCR
+            b1ggi/todo-app:${{ github.event.inputs.version }}
+            ghcr.io/${{ github.repository }}:${{ github.event.inputs.version }}
           labels: ${{ steps.meta.outputs.labels }}
 
       - name: Generate artifact attestation
