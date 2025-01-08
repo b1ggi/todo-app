@@ -1,5 +1,6 @@
 #Virtuelle Umgebung
 venv/
+.venv/
 
 #Caches und Logs
 __pycache__/
