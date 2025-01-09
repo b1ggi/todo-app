@@ -53,6 +53,8 @@ jobs:
           images: |
             b1ggi/todo-app:${{ github.event.inputs.version }}
             ghcr.io/${{ github.repository }}:${{ github.event.inputs.version }}
+            b1ggi/todo-app:${{ github.event.release.tag_name }}
+            ghcr.io/${{ github.repository }}:${{ github.event.release.tag_name }}
 
       - name: Build and push Docker images
         id: push
@@ -63,6 +65,8 @@ jobs:
           tags: |
             b1ggi/todo-app:${{ github.event.inputs.version }}
             ghcr.io/${{ github.repository }}:${{ github.event.inputs.version }}
+            b1ggi/todo-app:${{ github.event.release.tag_name }}
+            ghcr.io/${{ github.repository }}:${{ github.event.release.tag_name }}
           labels: ${{ steps.meta.outputs.labels }}
 
       - name: Generate artifact attestation
