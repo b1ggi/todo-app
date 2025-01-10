@@ -72,12 +72,6 @@ jobs:
             ghcr.io/${{ github.repository }}:latest
           labels: ${{ steps.meta.outputs.labels }}
 
-      - name: Generate artifact attestation for Docker Hub
-        uses: actions/attest-build-provenance@v2.1.0
-        with:
-          subject-name: b1ggi/todo-app
-          subject-digest: ${{ steps.push.outputs.digest }}
-          push-to-registry: true
   
       - name: Generate artifact attestation for GHCR
         uses: actions/attest-build-provenance@v2.1.0
