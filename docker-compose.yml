@@ -1,6 +1,6 @@
 services:
   todo-app:
-    image: todo-app:latest
+    image: ghcr.io/b1ggi/todo-app:latest
     ports:
       - "5000:5000"
     volumes:
