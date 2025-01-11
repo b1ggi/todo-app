@@ -13,8 +13,10 @@
     <img src="{{ url_for('static', filename='icon.png') }}" alt="Logo" style="width: 100px; display: block; margin: 0 auto; margin-bottom: 20px;">
 
     <!-- Aufgaben hinzufügen -->
-    <div style="text-align: center;">
-        <input maxlength="100" type="text" id="taskInput" placeholder="Neue Aufgabe" style="padding: 10px; ">
+    <div style="text-align: center; position: relative;">
+        <input maxlength="100" type="text" id="taskInput" placeholder="Neue Aufgabe (Enter)" style="padding: 10px; display: inline-block;">
+            <textarea id="hoverInput" rows="12" placeholder="Notizen (optional, CTRL+Enter)"></textarea>
+            <button id="hoverButton" onclick="addTask()" style="margin-top: 10px;">Speichern</button>
     </div>
 
     <br><h3>Zu erledigen</h3><ul id="taskList">
