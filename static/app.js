@@ -128,16 +128,23 @@ document.querySelectorAll('[id^="edit-task-input-"]').forEach(function(input) {
     });
 });
 
+
+
+
 // Show hovering input field and button when taskInput or hoverInput is focused
 document.getElementById('taskInput').addEventListener('focus', function() {
     document.getElementById('hoverInput').style.display = 'block';
     document.getElementById('hoverButton').style.display = 'block';
+    document.getElementById('hoverContainer').style.display = 'block';
 });
 
 document.getElementById('hoverInput').addEventListener('focus', function() {
     document.getElementById('hoverInput').style.display = 'block';
     document.getElementById('hoverButton').style.display = 'block';
+    document.getElementById('hoverContainer').style.display = 'block';
 });
+
+
 
 // Hide hovering input field and button when both taskInput and hoverInput lose focus
 document.getElementById('taskInput').addEventListener('blur', function() {
@@ -145,6 +152,7 @@ document.getElementById('taskInput').addEventListener('blur', function() {
         if (!document.getElementById('taskInput').matches(':focus') && !document.getElementById('hoverInput').matches(':focus')) {
             document.getElementById('hoverInput').style.display = 'none';
             document.getElementById('hoverButton').style.display = 'none';
+            document.getElementById('hoverContainer').style.display = 'none';
         }
     }, 100);
 });
@@ -154,6 +162,7 @@ document.getElementById('hoverInput').addEventListener('blur', function() {
         if (!document.getElementById('taskInput').matches(':focus') && !document.getElementById('hoverInput').matches(':focus')) {
             document.getElementById('hoverInput').style.display = 'none';
             document.getElementById('hoverButton').style.display = 'none';
+            document.getElementById('hoverContainer').style.display = 'none';
         }
     }, 100);
 });
