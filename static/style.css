@@ -30,3 +30,24 @@ span {
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+#hoverInput {
+    display: none;
+    position: absolute;
+    top: 65px;
+    width: 350px;
+    z-index: 1000;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 10px;
+}
+
+#hoverButton {
+    display: none;
+    margin-top: 10px;
+    position: absolute;
+    top: 265px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+}
