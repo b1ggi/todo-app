@@ -1,5 +1,12 @@
+@font-face {
+    font-family: 'FiraSans';
+    src: url("fonts/FiraSans-Light.ttf") format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'FiraSans';
   max-width: 600px;
   margin: auto;
   padding: 20px;
@@ -7,10 +14,12 @@ body {
 
 input[type="text"] {
   font-size: 16px;
+  font-family: 'FiraSans';
 }
 
 button {
   padding: 8px;
+  font-family: 'FiraSans';
 }
 
 ul {
@@ -42,16 +51,18 @@ span {
   padding: 10px;
   border: none;
   resize: none;
+  font-family: 'FiraSans';
 }
 
 #hoverButton {
   display: none;
   margin-top: 15px;
   position: absolute;
-  top: 210px;
+  bottom: 3px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 1000;
+  font-family: 'FiraSans';
 }
 
 #hoverContainer {

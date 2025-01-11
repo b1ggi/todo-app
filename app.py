@@ -7,7 +7,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 with app.app_context():
-            db.create_all() 
+    db.create_all() 
 
 # Model für To-Do-Aufgaben
 class Task(db.Model):
