@@ -1,32 +1,79 @@
+@font-face {
+    font-family: 'FiraSans';
+    src: url("fonts/FiraSans-Light.ttf") format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
 body {
-    font-family: Arial, sans-serif;
-    max-width: 600px;
-    margin: auto;
-    padding: 20px;
+  font-family: 'FiraSans';
+  max-width: 600px;
+  margin: auto;
+  padding: 20px;
 }
 
 input[type="text"] {
-    font-size: 16px;
+  font-size: 16px;
+  font-family: 'FiraSans';
 }
 
 button {
-    padding: 8px;
+  padding: 8px;
+  font-family: 'FiraSans';
 }
 
 ul {
-    list-style: none;
-    padding-left: 0;
+  list-style: none;
+  padding-left: 0;
 }
 
 li {
-    margin: 10px 0;
-    background-color: rgb(192, 192, 192);
-    padding: 10px;
+  margin: 10px 0;
+  background-color: rgb(192, 192, 192);
+  padding: 10px;
 }
 
 span {
-    max-width: 100%;
-    display: inline-block;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  max-width: 100%;
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#hoverInput {
+  display: none;
+  position: absolute;
+  top: 15px;
+  width: 350px;
+  z-index: 1000;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 10px;
+  border: none;
+  resize: none;
+  font-family: 'FiraSans';
+}
+
+#hoverButton {
+  display: none;
+  margin-top: 15px;
+  position: absolute;
+  bottom: 3px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  font-family: 'FiraSans';
+}
+
+#hoverContainer {
+  display: none;
+  position: absolute;
+  top: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  z-index: 999;
+  width: 400px;
+  height: 270px;
 }

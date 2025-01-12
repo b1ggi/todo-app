@@ -4,12 +4,7 @@
 A simple to-do list web application built with **Flask** and **SQLAlchemy**.
 It allows users to **add**, **delete**, and **update** tasks.
 
-<div style="text-align:center" align="center"><img src=https://github.com/user-attachments/assets/fcdd34e3-6fc1-4b54-ad88-80d3e0eed758></div>
-
-
-
-
-
+<img align="center" alt="Screenshot" src="https://github.com/user-attachments/assets/fcdd34e3-6fc1-4b54-ad88-80d3e0eed758">
 
 ## 🛠️ Requirements
 
@@ -52,18 +47,22 @@ Open your browser at [http://127.0.0.1:5000/](http://127.0.0.1:5000/) to access 
 ## ✨ Application Features
 
 ### 1. Add a Task
+
 - **Action**: Enter the task title in the input field and click **Hinzufügen**.  
 - **Result**: The new task appears in the list.
 
 ### 2. Delete a Task
+
 - **Action**: Click **Löschen** next to the task.  
 - **Result**: The task is removed from the list.
 
 ### 3. Complete a Task
+
 - **Action**: Click **Erledigen** next to a task.  
 - **Result**: The task moves to the completed tasks section.
 
 ### 4. Restore a Task
+
 - **Action**: Click **Wiederherstellen** next to a completed task.  
 - **Result**: The task returns to the active tasks section.
 
