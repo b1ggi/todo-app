@@ -16,44 +16,153 @@
 
   <div class="container">
 
-    <nav class="navbar bg-body-tertiary">    
-      <div class="container-fluid  justify-content-start">
-        <a class="navbar-brand" href="#">
-          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-list"
+    <nav class="navbar bg-body-tertiary py-0">    
+      <div class="container-fluid justify-content-start">
+        <!-- Todo: Menu für andere Projekte und Archiv -->
+        <button class="navbar-toggler btn btn-secondary mx-1 me-2">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list"
             viewBox="0 0 16 16">
             <path fill-rule="evenodd"
               d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5" />
           </svg>
-        </a>
-        <div class="navbar-brand">
+        </button>
+        <div class="navbar-text">
           <!-- Todo: Color Picker -->
           <!-- <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-circle-fill" viewBox="0 0 16 16">
                   <circle cx="6" cy="6" r="6"/>
                   </svg> -->
+
+                  <!-- Todo: Titel verarbeiten -->
           $Projekttitel
         </div> 
+        <!-- Todo: Search -->
         <form class="d-flex ms-auto" role="search">
-          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+          <input class="form-control  my-1 mx-1" type="search" placeholder="Search" aria-label="Search">
         </form>
       </div>
     </nav>
 
     <div class="row">
+
       <!-- Start lane -->
       <div class="col-12 col-lg-4">
         <div class="card mb-3">
-          <div class="card-header bg-light">
+
+          <div class="card-header bg-light d-flex justify-content-between align-items-center">
             <h3 class="card-title h5 mb-1">
-              Backlog
+              $Listentitel
             </h3>
-            <small class="mb-0 text-muted">
-              Nam pretium turpis et arcu. Duis arcu.
-            </small>
+            <div class="btn-group">
+              <!-- Icon 1 -->
+               <button type="button" class="btn btn-outline-secondary">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down" viewBox="0 0 16 16">
+                <path d="M3.204 5h9.592L8 10.481zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659"/>
+              </svg>
+            </button>
+              <!-- Icon 2 -->
+              <button type="button" class="btn btn-outline-secondary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-archive"
+                  viewBox="0 0 16 16">
+                  <path
+                    d="M0 2a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1v7.5a2.5 2.5 0 0 1-2.5 2.5h-9A2.5 2.5 0 0 1 1 12.5V5a1 1 0 0 1-1-1zm2 3v7.5A1.5 1.5 0 0 0 3.5 14h9a1.5 1.5 0 0 0 1.5-1.5V5zm13-3H1v2h14zM5 7.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5" />
+                </svg>
+              </button>
+              <!-- Icon 3 -->
+              <button type="button" class="btn btn-outline-secondary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-square" viewBox="0 0 16 16">
+                  <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"/>
+                  <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+                </svg>
+            </button>
+            </div>
           </div>
+
+          
           <div class="card-body">
             <div class="tasks" id="backlog">
 
               <!-- Start task -->
+              <div class="card mb-3">
+                <div class="card-body">
+                  <p class="mb-0">You can move these elements between the containers</p>
+                  <div class="text-right">
+                    <small class="text-muted mb-1 d-inline-block">25%</small>
+                  </div>
+                  <div class="progress" style="height: 5px;">
+                    <div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25"
+                      aria-valuemin="0" aria-valuemax="100"></div>
+                  </div>
+                </div>
+              </div>
+              <!-- End task -->
+
+              <!-- Start task -->
+              <div class="card mb-3">
+                <img class="card-img-top" src="https://source.unsplash.com/sECcwm6BN8w/400x200"
+                  alt="Bootstrap Kanban Board" />
+                <div class="card-body">
+                  <span class="badge bg-primary text-white mb-2">On hold</span>
+                  <p class="mb-0">Moving them anywhere else isn't quite possible</p>
+                  <div class="text-right">
+                    <small class="text-muted mb-1 d-inline-block">33%</small>
+                  </div>
+                  <div class="progress" style="height: 5px;">
+                    <div class="progress-bar" role="progressbar" style="width: 33%;" aria-valuenow="33"
+                      aria-valuemin="0" aria-valuemax="100"></div>
+                  </div>
+                </div>
+              </div>
+              <!-- End task -->
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- End lane -->
+
+
+
+
+
+
+
+
+      <!-- Start lane -->
+      <div class="col-12 col-lg-4">
+        <div class="card mb-3">
+
+          <div class="card-header bg-light d-flex justify-content-between align-items-center">
+            <h3 class="card-title h5 mb-1">
+              $Listentitel
+            </h3>
+            <div class="btn-group">
+              <!-- Icon 1 -->
+               <button type="button" class="btn btn-outline-secondary">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down" viewBox="0 0 16 16">
+                <path d="M3.204 5h9.592L8 10.481zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659"/>
+              </svg>
+            </button>
+              <!-- Icon 2 -->
+              <button type="button" class="btn btn-outline-secondary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-archive"
+                  viewBox="0 0 16 16">
+                  <path
+                    d="M0 2a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1v7.5a2.5 2.5 0 0 1-2.5 2.5h-9A2.5 2.5 0 0 1 1 12.5V5a1 1 0 0 1-1-1zm2 3v7.5A1.5 1.5 0 0 0 3.5 14h9a1.5 1.5 0 0 0 1.5-1.5V5zm13-3H1v2h14zM5 7.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5" />
+                </svg>
+              </button>
+              <!-- Icon 3 -->
+              <button type="button" class="btn btn-outline-secondary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-square" viewBox="0 0 16 16">
+                  <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"/>
+                  <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+                </svg>
+            </button>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="tasks" id="backlog">
+
+              <!-- Sta</a></a>rt task -->
               <div class="card mb-3">
                 <div class="card-body">
                   <p class="mb-0">You can move these elements between the containers</p>
@@ -93,7 +202,247 @@
       </div>
       <!-- End lane -->
 
-    </div>
+
+
+
+
+      <!-- Start lane -->
+      <div class="col-12 col-lg-4">
+        <div class="card mb-3">
+
+          <div class="card-header bg-light d-flex justify-content-between align-items-center">
+            <h3 class="card-title h5 mb-1">
+              $Listentitel
+            </h3>
+            <div class="btn-group">
+              <!-- Icon 1 -->
+               <button type="button" class="btn btn-outline-secondary">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down" viewBox="0 0 16 16">
+                <path d="M3.204 5h9.592L8 10.481zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659"/>
+              </svg>
+            </button>
+              <!-- Icon 2 -->
+              <button type="button" class="btn btn-outline-secondary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-archive"
+                  viewBox="0 0 16 16">
+                  <path
+                    d="M0 2a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1v7.5a2.5 2.5 0 0 1-2.5 2.5h-9A2.5 2.5 0 0 1 1 12.5V5a1 1 0 0 1-1-1zm2 3v7.5A1.5 1.5 0 0 0 3.5 14h9a1.5 1.5 0 0 0 1.5-1.5V5zm13-3H1v2h14zM5 7.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5" />
+                </svg>
+              </button>
+              <!-- Icon 3 -->
+              <button type="button" class="btn btn-outline-secondary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-square" viewBox="0 0 16 16">
+                  <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"/>
+                  <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+                </svg>
+            </button>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="tasks" id="backlog">
+
+              <!-- Sta</a></a>rt task -->
+              <div class="card mb-3">
+                <div class="card-body">
+                  <p class="mb-0">You can move these elements between the containers</p>
+                  <div class="text-right">
+                    <small class="text-muted mb-1 d-inline-block">25%</small>
+                  </div>
+                  <div class="progress" style="height: 5px;">
+                    <div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25"
+                      aria-valuemin="0" aria-valuemax="100"></div>
+                  </div>
+                </div>
+              </div>
+              <!-- End task -->
+
+              <!-- Start task -->
+              <div class="card mb-3">
+                <img class="card-img-top" src="https://source.unsplash.com/sECcwm6BN8w/400x200"
+                  alt="Bootstrap Kanban Board" />
+                <div class="card-body">
+                  <span class="badge bg-primary text-white mb-2">On hold</span>
+                  <p class="mb-0">Moving them anywhere else isn't quite possible</p>
+                  <div class="text-right">
+                    <small class="text-muted mb-1 d-inline-block">33%</small>
+                  </div>
+                  <div class="progress" style="height: 5px;">
+                    <div class="progress-bar" role="progressbar" style="width: 33%;" aria-valuenow="33"
+                      aria-valuemin="0" aria-valuemax="100"></div>
+                  </div>
+                </div>
+              </div>
+              <!-- End task -->
+
+            </div>
+            <div class="btn btn-primary btn-block">Add task</div>
+          </div>
+        </div>
+      </div>
+      <!-- End lane -->
+
+
+
+
+
+      <!-- Start lane -->
+      <div class="col-12 col-lg-4">
+        <div class="card mb-3">
+
+          <div class="card-header bg-light d-flex justify-content-between align-items-center">
+            <h3 class="card-title h5 mb-1">
+              $Listentitel
+            </h3>
+            <div class="btn-group">
+              <!-- Icon 1 -->
+               <button type="button" class="btn btn-outline-secondary">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down" viewBox="0 0 16 16">
+                <path d="M3.204 5h9.592L8 10.481zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659"/>
+              </svg>
+            </button>
+              <!-- Icon 2 -->
+              <button type="button" class="btn btn-outline-secondary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-archive"
+                  viewBox="0 0 16 16">
+                  <path
+                    d="M0 2a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1v7.5a2.5 2.5 0 0 1-2.5 2.5h-9A2.5 2.5 0 0 1 1 12.5V5a1 1 0 0 1-1-1zm2 3v7.5A1.5 1.5 0 0 0 3.5 14h9a1.5 1.5 0 0 0 1.5-1.5V5zm13-3H1v2h14zM5 7.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5" />
+                </svg>
+              </button>
+              <!-- Icon 3 -->
+              <button type="button" class="btn btn-outline-secondary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-square" viewBox="0 0 16 16">
+                  <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"/>
+                  <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+                </svg>
+            </button>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="tasks" id="backlog">
+
+              <!-- Sta</a></a>rt task -->
+              <div class="card mb-3">
+                <div class="card-body">
+                  <p class="mb-0">You can move these elements between the containers</p>
+                  <div class="text-right">
+                    <small class="text-muted mb-1 d-inline-block">25%</small>
+                  </div>
+                  <div class="progress" style="height: 5px;">
+                    <div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25"
+                      aria-valuemin="0" aria-valuemax="100"></div>
+                  </div>
+                </div>
+              </div>
+              <!-- End task -->
+
+              <!-- Start task -->
+              <div class="card mb-3">
+                <img class="card-img-top" src="https://source.unsplash.com/sECcwm6BN8w/400x200"
+                  alt="Bootstrap Kanban Board" />
+                <div class="card-body">
+                  <span class="badge bg-primary text-white mb-2">On hold</span>
+                  <p class="mb-0">Moving them anywhere else isn't quite possible</p>
+                  <div class="text-right">
+                    <small class="text-muted mb-1 d-inline-block">33%</small>
+                  </div>
+                  <div class="progress" style="height: 5px;">
+                    <div class="progress-bar" role="progressbar" style="width: 33%;" aria-valuenow="33"
+                      aria-valuemin="0" aria-valuemax="100"></div>
+                  </div>
+                </div>
+              </div>
+              <!-- End task -->
+
+            </div>
+            <div class="btn btn-primary btn-block">Add task</div>
+          </div>
+        </div>
+      </div>
+      <!-- End lane -->
+
+
+
+
+          <!-- Start lane -->
+          <div class="col-12 col-lg-4">
+            <div class="card mb-3">
+    
+              <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                <h3 class="card-title h5 mb-1">
+                  $Listentitel
+                </h3>
+                <div class="btn-group">
+                  <!-- Icon 1 -->
+                   <button type="button" class="btn btn-outline-secondary">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down" viewBox="0 0 16 16">
+                    <path d="M3.204 5h9.592L8 10.481zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659"/>
+                  </svg>
+                </button>
+                  <!-- Icon 2 -->
+                  <button type="button" class="btn btn-outline-secondary">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-archive"
+                      viewBox="0 0 16 16">
+                      <path
+                        d="M0 2a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1v7.5a2.5 2.5 0 0 1-2.5 2.5h-9A2.5 2.5 0 0 1 1 12.5V5a1 1 0 0 1-1-1zm2 3v7.5A1.5 1.5 0 0 0 3.5 14h9a1.5 1.5 0 0 0 1.5-1.5V5zm13-3H1v2h14zM5 7.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5" />
+                    </svg>
+                  </button>
+                  <!-- Icon 3 -->
+                  <button type="button" class="btn btn-outline-secondary">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-square" viewBox="0 0 16 16">
+                      <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"/>
+                      <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+                    </svg>
+                </button>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="tasks" id="backlog">
+    
+                  <!-- Sta</a></a>rt task -->
+                  <div class="card mb-3">
+                    <div class="card-body">
+                      <p class="mb-0">You can move these elements between the containers</p>
+                      <div class="text-right">
+                        <small class="text-muted mb-1 d-inline-block">25%</small>
+                      </div>
+                      <div class="progress" style="height: 5px;">
+                        <div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25"
+                          aria-valuemin="0" aria-valuemax="100"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- End task -->
+    
+                  <!-- Start task -->
+                  <div class="card mb-3">
+                    <img class="card-img-top" src="https://source.unsplash.com/sECcwm6BN8w/400x200"
+                      alt="Bootstrap Kanban Board" />
+                    <div class="card-body">
+                      <span class="badge bg-primary text-white mb-2">On hold</span>
+                      <p class="mb-0">Moving them anywhere else isn't quite possible</p>
+                      <div class="text-right">
+                        <small class="text-muted mb-1 d-inline-block">33%</small>
+                      </div>
+                      <div class="progress" style="height: 5px;">
+                        <div class="progress-bar" role="progressbar" style="width: 33%;" aria-valuenow="33"
+                          aria-valuemin="0" aria-valuemax="100"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- End task -->
+    
+                </div>
+                <div class="btn btn-primary btn-block">Add task</div>
+              </div>
+            </div>
+          </div>
+          <!-- End lane -->
+    
+        </div>
+
+
+
+      </div>
   </div>
 
 
