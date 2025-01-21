@@ -16,10 +16,10 @@
 
   <div class="container">
 
-    <nav class="navbar bg-body-tertiary py-0 sticky-top">    
-      <div class="container-fluid">
+    <nav class="navbar bg-body-tertiary p-0 sticky-top">    
+      <div class="container-fluid px-2">
         <!-- Todo: Menu für andere Projekte und Archiv -->
-        <button class="navbar-toggler btn btn-secondary mx-1 me-2">
+        <button class="navbar-toggler btn btn-secondary  me-2">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list"
             viewBox="0 0 16 16">
             <path fill-rule="evenodd"
@@ -37,7 +37,7 @@
         </div> 
         <!-- Todo: Search -->
         <form class="d-flex ms-auto" role="search">
-          <input class="form-control  my-1 mx-1" type="search" placeholder="Search" aria-label="Search">
+          <input class="form-control  my-1 " type="search" placeholder="Search" aria-label="Search">
         </form>
       </div>
     </nav>
@@ -46,10 +46,10 @@
 
       <!-- Start lane -->
       <div class="col-12 col-lg-4">
-        <div class="card mb-3">
+        <div class="card mb-2">
 
-          <div class="card-header bg-light d-flex justify-content-between align-items-center py-1">
-            <h3 class="card-title h6 mb-1 text-truncate">
+          <div class="card-header bg-light d-flex justify-content-between align-items-center py-1 px-2">
+            <h3 class="card-title h6 mb-0 text-truncate">
               <!-- Todo: Listentitel -->
               $Listentitelaaaaaaaaaaaaaaaaaaaaaaaa
             </h3>
@@ -86,22 +86,22 @@
 
 
 
-          <div class="card-body">
+          <!-- <div class="card-body"> -->
             <!-- Todo: change id -->
             <div class="tasks" id="Listentitel-id">
 
 
               <!-- Start task -->
-              <div class="card ">
-                <div class="card-body">
-                  <p class="mb-0 overflow-x-hidden">You can move these elements between the containers</p>
+              <div class="card p-2">
+                <!-- <div class="card-body"> -->
+                  <p class="mb-0 text-truncate">You can move these elements between the containers</p>
                   <div class="text-right">
                     <small class="text-muted mb-1 d-inline-block">25%</small>
                   </div>
                   <div class="progress" style="height: 5px;">
                     <div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25"
                       aria-valuemin="0" aria-valuemax="100"></div>
-                  </div>
+                  <!-- </div> -->
                 </div>
               </div>
               <!-- End task -->
@@ -126,7 +126,7 @@
               <!-- End task -->
 
             </div>
-          </div>
+          <!-- </div> -->
 
 
         </div>
