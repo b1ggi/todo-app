@@ -26,12 +26,18 @@
               d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5" />
           </svg>
         </button>
-        <div class="navbar-text text-truncate">
+        <span class="navbar-text text-truncate">
           <!-- Todo: Color Picker -->
 
                   <!-- Todo: Titel verarbeiten -->
           $Projekttitel
-        </div> 
+        </span>
+        <button type="button" class="btn btn-outline-secondary border-0 btn-sm ms-1">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+          </svg>
+        </button>
+
         <!-- Todo: Search -->
         <form class="d-flex ms-auto" role="search">
           <input class="form-control  my-1 " type="search" placeholder="Search" aria-label="Search">
@@ -51,13 +57,13 @@
               $Listentitelaaaaaaaaaaaaaaaaaaaaaaaa
             </h3>
             <div class="btn-group">
-              <!-- Icon 1 -->
+              <!-- Todo: Collapse  -->
                <button type="button" class="btn btn-outline-secondary btn-sm border-0">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down" viewBox="0 0 16 16">
                 <path d="M3.204 5h9.592L8 10.481zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659"/>
               </svg>
             </button>
-              <!-- Icon 2 -->
+              <!-- Todo: Archive -->
               <button type="button" class="btn btn-outline-secondary btn-sm border-0">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-archive"
                   viewBox="0 0 16 16">
@@ -65,7 +71,7 @@
                     d="M0 2a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1v7.5a2.5 2.5 0 0 1-2.5 2.5h-9A2.5 2.5 0 0 1 1 12.5V5a1 1 0 0 1-1-1zm2 3v7.5A1.5 1.5 0 0 0 3.5 14h9a1.5 1.5 0 0 0 1.5-1.5V5zm13-3H1v2h14zM5 7.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5" />
                 </svg>
               </button>
-              <!-- Icon 3 -->
+              <!-- Todo: Add Card -->
               <button type="button" class="btn btn-outline-secondary btn-sm border-0">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
                   <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
@@ -93,18 +99,23 @@
                 <div class="d-flex justify-content-between align-items-center">
 
                   <span class="text-truncate">$Card title Lorem ipsum heieeiei lorem ipsum lorem lorem </span>
-                    <!-- d-none wenn kein body -->
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-body-text" viewBox="0 0 16 16">
-                    <path fill-rule="evenodd" d="M0 .5A.5.5 0 0 1 .5 0h4a.5.5 0 0 1 0 1h-4A.5.5 0 0 1 0 .5m0 2A.5.5 0 0 1 .5 2h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m9 0a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m-9 2A.5.5 0 0 1 .5 4h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5m5 0a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m7 0a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5m-12 2A.5.5 0 0 1 .5 6h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5m8 0a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m-8 2A.5.5 0 0 1 .5 8h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m7 0a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m-7 2a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 0 1h-8a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5"/>
-                  </svg>
+
 
                 </div>
 
 
 
-                  <div class="d-flex">
+                  <div class="d-flex align-items-center">
+                    <div class="d-flex gap-1 align-items-center">
                          <!-- d-none wenn kein subtask                 -->
-                    <small class="text-muted mb-0">$25%</small>
+                    <small class="text-secondary mb-0">$25%</small>
+
+                  <!-- d-none wenn kein body -->
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"  fill="currentColor" class="bi bi-body-text text-secondary" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M0 .5A.5.5 0 0 1 .5 0h4a.5.5 0 0 1 0 1h-4A.5.5 0 0 1 0 .5m0 2A.5.5 0 0 1 .5 2h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m9 0a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m-9 2A.5.5 0 0 1 .5 4h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5m5 0a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m7 0a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5m-12 2A.5.5 0 0 1 .5 6h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5m8 0a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m-8 2A.5.5 0 0 1 .5 8h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m7 0a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m-7 2a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 0 1h-8a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5"/>
+                  </svg>
+
+                </div>
 
                     <div class="ms-auto">
                       <!-- Wenn on hold -->
@@ -112,7 +123,16 @@
                       <!-- entweder wenn prio high -->
                       <span class="badge bg-danger text-white">High</span>
                       <!-- oder wenn prio low, oder nichts-->
-                      <span class="badge bg-success text-white d-none">Low</span>
+                      <span class="badge bg-success text-white">Low</span>
+
+                      <button class="btn btn-outline-secondary btn-sm border-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
+                          <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3"/>
+                        </svg>
+                      </button>
+
+
+
                     </div>
                   
                   </div>
@@ -131,13 +151,7 @@
 
 
 
-                  <!-- <div class="text-end">
-                    <small class="text-muted mb-1 d-inline-block">25%</small>
-                  </div>
-                  <div class="progress" style="height: 5px;">
-                    <div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25"
-                      aria-valuemin="0" aria-valuemax="100"></div>
-                </div> -->
+
               </div>
               <!-- End task -->
 
@@ -502,7 +516,7 @@
                     <div class="card-body">
                       <p class="mb-0">You can move these elements between the containers</p>
                       <div class="text-right">
-                        <small class="text-muted mb-1 d-inline-block">25%</small>
+                        <small class="text-secondary mb-1 d-inline-block">25%</small>
                       </div>
                       <div class="progress" style="height: 5px;">
                         <div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25"
