@@ -109,7 +109,7 @@
                   <!-- Todo: entweder wenn $prio high -->
                   <span class="badge bg-danger text-white">High</span>
                   <!-- Todo: oder wenn $prio low, oder nichts-->
-                  <span class="badge bg-success text-white">Low</span>
+                  <span class="badge bg-success text-white d-none">Low</span>
                   <!-- Todo: Dreipunkt Button -->
                   <button class="btn btn-outline-secondary btn-sm border-0">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -150,9 +150,9 @@
                   <!-- Todo: Wenn $onHold -->
                   <span class="badge bg-primary text-white">On hold</span>
                   <!-- Todo: entweder wenn $prio high -->
-                  <span class="badge bg-danger text-white">High</span>
+                  <span class="badge bg-danger text-white d-none">High</span>
                   <!-- Todo: oder wenn $prio low, oder nichts-->
-                  <span class="badge bg-success text-white">Low</span>
+                  <span class="badge bg-success text-white d-none">Low</span>
                   <!-- Todo: Dreipunkt Button -->
                   <button class="btn btn-outline-secondary btn-sm border-0">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -222,7 +222,7 @@
               <div class="d-flex align-items-center">
                 <div class="d-flex gap-1 align-items-center">
                   <!-- Todo: Subtask %, d-none wenn kein subtask -->
-                  <small class="text-secondary mb-0">$25%</small>
+                  <small class="text-secondary mb-0 d-none">$25%</small>
                   <!-- Todo: d-none wenn kein body -->
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                     class="bi bi-body-text text-secondary" viewBox="0 0 16 16">
@@ -248,7 +248,7 @@
                 </div>
               </div>
               <!-- Todo: Subtask Progress, d-none wenn kein subtask -->
-              <div class="progress mt-1" style="height: 5px;">
+              <div class="progress mt-1 d-none" style="height: 5px;">
                 <div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0"
                   aria-valuemax="100">
                 </div>
