@@ -70,17 +70,17 @@ function editTask(taskId) {
 }
 
 // Funktion zum Erledigen einer Aufgabe
-function completeTask(taskId){
+function archivedTask(taskId){
     fetch(`/update/${taskId}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
         },
-        body: `complete=True`
+        body: `archived=True`
     })
     .then(response => response.json())
     .then(data => {
-        if (data.message === "Task completed!") {
+        if (data.message === "Task archived!") {
             location.reload();  // Seite neu laden, um die aktualisierte Aufgabe anzuzeigen
         }
     });
@@ -93,7 +93,7 @@ function restoreTask(taskId){
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
         },
-        body: `complete=False`
+        body: `archived=False`
     })
     .then(response => response.json())
     .then(data => {

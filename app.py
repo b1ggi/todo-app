@@ -9,19 +9,47 @@ db = SQLAlchemy(app)
 with app.app_context():
     db.create_all() 
 
+class Project(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    archived = db.Column(db.Boolean, default=False)
+    lists = db.relationship('List', backref='project', lazy=True)
+
+class List(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    archived = db.Column(db.Boolean, default=False)
+    project_id = db.Column(db.Integer, db.ForeignKey('project.id'), nullable=False)
+    tasks = db.relationship('Task', backref='list', lazy=True)
+
 # Model für To-Do-Aufgaben
 class Task(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
-    complete = db.Column(db.Boolean, default=False)
     body = db.Column(db.Text, nullable=True)
+    archived = db.Column(db.Boolean, default=False)
+    list_id = db.Column(db.Integer, db.ForeignKey('list.id'), nullable=False)
+    subtasks = db.relationship('Subtask', backref='task', lazy=True)
+
+class Subtask(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Columnt(db.String(100), nullable=False)
+    archived = db.Column(db.Boolean, default=False)
+    task_id = db.Column(db.Integer, db.ForeignKey('task.id'), nullable=False)
+    
+    
+    
+
+    
+    
+
 
 # Startseite anzeigen
 @app.route('/')
 def index():
-    tasks = db.session.query(Task).filter_by(complete=False).all()
-    completed = db.session.query(Task).filter_by(complete=True).all()
-    return render_template('index.html', tasks=tasks, completed=completed)
+    tasks = db.session.query(Task).filter_by(archived=False).all()
+    archived = db.session.query(Task).filter_by(archived=True).all()
+    return render_template('index.html', tasks=tasks, archived=archived)
 
 # Aufgabe hinzufügen
 @app.route('/add', methods=['POST'])
@@ -47,16 +75,16 @@ def delete_task(task_id):
 def update_task(task_id):
     task = Task.query.get_or_404(task_id)
 
-    new_complete = request.form.get('complete')
+    new_archived = request.form.get('archived')
     new_title = request.form.get('title')
     new_body = request.form.get('body')
     
-    if new_complete == "True":
-        task.complete=True
+    if new_archived == "True":
+        task.archived=True
         db.session.commit()
-        return jsonify({"message": "Task completed!"}), 200
-    elif new_complete == "False":
-        task.complete=False
+        return jsonify({"message": "Task archived!"}), 200
+    elif new_archived == "False":
+        task.archived=False
         db.session.commit()
         return jsonify({"message": "Task restored!"}), 200
     elif new_title:

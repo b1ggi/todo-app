@@ -31,12 +31,12 @@
                 <br>
                 <button onclick="editTask({{ task.id }})">Bearbeiten</button>
                 <button onclick="deleteTask({{ task.id }})">Löschen</button>
-                <button onclick="completeTask({{ task.id }})">Erledigen</button>
+                <button onclick="completeTask({{ task.id }})">Archivieren</button>
             </li>
         {% endfor %}
     </ul>
-    <br><h3>Erledigt</h3><ul id="completedTaskList">
-        {% for task in completed %}
+    <br><h3>Archiviert</h3><ul id="archivedTaskList">
+        {% for task in archived %}
             <li id="task-{{ task.id }}">
                 <div>
                 <span>{{ task.title }}</span>
