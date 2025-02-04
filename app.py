@@ -103,8 +103,6 @@ def index():
     return render_template('index.html',project=project, lists=lists, tasks_by_list=tasks_by_list, subtasks_by_task=subtasks_by_task)
 
 
-
-
 #Liste hinzufügen
 @app.route('/list', methods=['POST'])
 def add_list():
