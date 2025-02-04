@@ -9,7 +9,7 @@ db = SQLAlchemy(app)
 
 class Project(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False)
+    title = db.Column(db.String(100), nullable=False)
     archived = db.Column(db.Boolean, default=False)
     is_default = db.Column(db.Boolean, default=False)
     lists = db.relationship('List', backref='project', lazy=True)
@@ -17,7 +17,7 @@ class Project(db.Model):
 
 class List(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False)
+    title = db.Column(db.String(100), nullable=False)
     archived = db.Column(db.Boolean, default=False)
     is_default = db.Column(db.Boolean, default=False)
     project_id = db.Column(db.Integer, db.ForeignKey('project.id'), nullable=False)
@@ -49,7 +49,7 @@ with app.app_context():
     default_project = Project.query.filter_by(is_default=True).first()
     if not default_project:
         #Create the default project
-        default_project = Project(name="Default Project", is_default=True)
+        default_project = Project(title="Default Project", is_default=True)
         db.session.add(default_project)
         db.session.commit()
     
@@ -58,8 +58,18 @@ with app.app_context():
     default_list = List.query.filter_by(is_default=True).first()
     if not default_list:
         #Create the default list
-        default_list = List(name="Default List", project_id=default_project.id, is_default=True)
+        default_list = List(title="Default List", project_id=default_project.id, is_default=True)
         db.session.add(default_list)
+        db.session.flush()
+
+        #für die Entwicklung: füge card zu, TODO: später entfernen
+        dev_card = Task(title="Entwickler-Task", body="Erstelle die App mit Flask und SQLAlchemy", list_id=default_list.id)
+        db.session.add(dev_card)
+        db.session.flush()
+        #für die Entwicklung: füge subcardcard zu, TODO: später entfernen
+        dev_subcard = Subtask(title="Entwickler-Subtask", task_id=dev_card.id)
+        db.session.add(dev_subcard)     
+
         db.session.commit()
 
 
@@ -69,14 +79,17 @@ def index():
     project = db.session.query(Project).filter_by(is_default=True).first()
     lists = db.session.query(List).filter_by(archived=False, project_id=project.id).all()
 
-    tasks = []
-    subtasks = []
+    tasks_by_list = {}
+    subtasks_by_tasks = {}
 
     for single_list in lists:
-        tasks = db.session.query(Task).filter_by(archived=False, list_id=single_list.id).all()
-        for single_task in tasks:
-            subtasks = db.session.query(Subtask).filter_by(archived=False, task_id=single_task.id).all()
-    return render_template('index.html',project=project, lists=lists, tasks=tasks, subtasks=subtasks)
+        list_tasks = db.session.query(Task).filter_by(archived=False, list_id=single_list.id).all()
+        tasks_by_list[single_list.id] = list_tasks
+        for single_task in list_tasks:
+            task_subtasks = db.session.query(Subtask).filter_by(archived=False, task_id=single_task.id).all()
+            subtasks_by_tasks[single_task.id] = task_subtasks
+    return render_template('index.html',project=project, lists=lists, tasks_by_list=tasks_by_list, subtasks_by_tasks=subtasks_by_tasks)
+#index.html -> tasks_by_list, subtasks_by_tasks
 
 
 
