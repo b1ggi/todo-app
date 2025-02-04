@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta content='yes' name='apple-mobile-web-app-capable'/>
+    <meta content='yes' name='mobile-web-app-capable'/> 
+    <title>To-Do Liste</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style2.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+</head>
+<body>
+    <img src="{{ url_for('static', filename='icon.png') }}" alt="Logo" style="width: 100px; display: block; margin: 0 auto; margin-bottom: 20px;">
+
+    <!-- Aufgaben hinzufügen -->
+    <div style="text-align: center; position: relative;">
+        <input maxlength="100" type="text" id="taskInput" placeholder="Neue Aufgabe (⏎)" style="padding: 10px; display: inline-block;">
+        <div id="hoverContainer">
+            <textarea id="hoverInput" rows="12" placeholder="Notizen (optional, CTRL+⏎)"></textarea>
+            <button id="hoverButton" onclick="addTask()">Speichern</button>
+        </div>
+    </div>
+
+    <br><h3>Zu erledigen</h3><ul id="taskList">
+        {% for task in tasks %}
+            <li id="task-{{ task.id }}">
+                <div>
+                <span id="task-title-{{ task.id }}">{{ task.title }}</span>
+                <input maxlength="100" type="text" id="edit-task-input-{{ task.id }}" style="display:none;" placeholder="Titel">
+                </div>
+                <br>
+                <button onclick="editTask({{ task.id }})">Bearbeiten</button>
+                <button onclick="deleteTask({{ task.id }})">Löschen</button>
+                <button onclick="completeTask({{ task.id }})">Archivieren</button>
+            </li>
+        {% endfor %}
+    </ul>
+    <br><h3>Archiviert</h3><ul id="archivedTaskList">
+        {% for task in archived %}
+            <li id="task-{{ task.id }}">
+                <div>
+                <span>{{ task.title }}</span>
+                </div>
+                <br>
+                <button onclick="deleteTask({{ task.id }})">Löschen</button>
+                <button onclick="restoreTask({{ task.id }})">Wiederherstellen</button>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <script src="{{ url_for('static', filename='app2.js') }}"></script>
+</body>
+</html>
