@@ -127,6 +127,7 @@ def add_list():
 @app.route('/list/<int:list_id>', methods=['POST'])
 def update_list(list_id):
     list = List.query.get_or_404(list_id)
+    tasks = Task.query.filter_by(list_id=list_id).all()
 
     new_archived = request.form.get('archived')
     new_title = request.form.get('title')
@@ -134,12 +135,16 @@ def update_list(list_id):
     
     if new_archived == "True":
         list.archived=True
+        for task in tasks:
+            task.archived=True
         db.session.commit()
-        return jsonify({"message": "List archived!"}), 200
+        return jsonify({"message": "List and Tasks archived!"}), 200
     elif new_archived == "False":
         list.archived=False
+        for task in tasks:
+            task.archived=False
         db.session.commit()
-        return jsonify({"message": "List restored!"}), 200
+        return jsonify({"message": "List and Tasks restored!"}), 200
     elif new_title:
         list.title = new_title
         db.session.commit()
@@ -154,6 +159,17 @@ def update_list(list_id):
             return jsonify({"message": "Project not found!"}), 404
     else:
         return jsonify({"message": "No update provided!"}), 400
+    
+#Liste löschen
+@app.route('/list/<int:list_id>', methods=['DELETE'])
+def delete_list(list_id):
+    list = List.query.get_or_404(list_id)
+    db.session.delete(list)
+    db.session.commit()
+    return jsonify({"message": "List deleted!"}), 200
+
+
+
 
 
 
