@@ -41,55 +41,66 @@ class Subtask(db.Model):
     
 
 
-    
-with app.app_context():
-    db.create_all()
+def init_db():    
+    with app.app_context():
+        db.create_all()
 
-    #Check if the default project exists
-    default_project = Project.query.filter_by(is_default=True).first()
-    if not default_project:
-        #Create the default project
-        default_project = Project(title="Default Project", is_default=True)
-        db.session.add(default_project)
-        db.session.commit()
-    
-    
-    #Check if the default list exists
-    default_list = List.query.filter_by(is_default=True).first()
-    if not default_list:
-        #Create the default list
-        default_list = List(title="Default List", project_id=default_project.id, is_default=True)
-        db.session.add(default_list)
-        db.session.flush()
+        #Check if the default project exists
+        default_project = Project.query.filter_by(is_default=True).first()
+        if not default_project:
+            #Create the default project
+            default_project = Project(title="Default Project", is_default=True)
+            db.session.add(default_project)
+            db.session.commit()
+        
+        
+        #Check if the default list exists
+        default_list = List.query.filter_by(is_default=True).first()
+        if not default_list:
+            #Create the default list
+            default_list = List(title="Default List", project_id=default_project.id, is_default=True)
+            db.session.add(default_list)
+            db.session.flush()
 
-        #für die Entwicklung: füge card zu, TODO: später entfernen
-        dev_card = Task(title="Entwickler-Task", body="Erstelle die App mit Flask und SQLAlchemy", list_id=default_list.id)
-        db.session.add(dev_card)
-        db.session.flush()
-        #für die Entwicklung: füge subcardcard zu, TODO: später entfernen
-        dev_subcard = Subtask(title="Entwickler-Subtask", task_id=dev_card.id)
-        db.session.add(dev_subcard)     
+            #für die Entwicklung: füge card zu, TODO: später entfernen
+            dev_card = Task(title="Entwickler-Task", body="Erstelle die App mit Flask und SQLAlchemy", list_id=default_list.id)
+            db.session.add(dev_card)
+            db.session.flush()
+            #für die Entwicklung: füge subcardcard zu, TODO: später entfernen
+            dev_subcard = Subtask(title="Entwickler-Subtask", task_id=dev_card.id)
+            db.session.add(dev_subcard)     
 
-        db.session.commit()
+            db.session.commit()
+
+#Datenbank initialisieren
+init_db()
 
 
 # Startseite anzeigen
 @app.route('/')
 def index():
+    #Int?
     project = db.session.query(Project).filter_by(is_default=True).first()
+    #Liste
     lists = db.session.query(List).filter_by(archived=False, project_id=project.id).all()
 
+    #Dict
     tasks_by_list = {}
-    subtasks_by_tasks = {}
+    subtasks_by_task = {}
 
     for single_list in lists:
+        #Liste
         list_tasks = db.session.query(Task).filter_by(archived=False, list_id=single_list.id).all()
+
         tasks_by_list[single_list.id] = list_tasks
+
         for single_task in list_tasks:
+            #Liste
             task_subtasks = db.session.query(Subtask).filter_by(archived=False, task_id=single_task.id).all()
-            subtasks_by_tasks[single_task.id] = task_subtasks
-    return render_template('index.html',project=project, lists=lists, tasks_by_list=tasks_by_list, subtasks_by_tasks=subtasks_by_tasks)
-#index.html -> tasks_by_list, subtasks_by_tasks
+
+            subtasks_by_task[single_task.id] = task_subtasks
+
+    return render_template('index.html',project=project, lists=lists, tasks_by_list=tasks_by_list, subtasks_by_task=subtasks_by_task)
 
 
 
