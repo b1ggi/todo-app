@@ -104,58 +104,113 @@ def index():
 
 
 
-#Weitermachen
+
+#Liste hinzufügen
+@app.route('/list', methods=['POST'])
+def add_list():
+    title = request.form.get('title')
+    project_id = request.form.get('project_id')
+    if title and project_id:
+        project = Project.query.get(project_id)
+        if project:
+            new_list = List(title=title, project_id=project_id)
+            db.session.add(new_list)
+            db.session.commit()
+            return jsonify({"message": "List added!"}), 200
+        else:
+            return jsonify({"message": "Project not found!"}), 404
+    else:
+        return jsonify({"message": "Title and project_id are required!"}), 400
+    
+
+#Liste ändern
+@app.route('/list/<int:list_id>', methods=['POST'])
+def update_list(list_id):
+    list = List.query.get_or_404(list_id)
+
+    new_archived = request.form.get('archived')
+    new_title = request.form.get('title')
+    new_project_id = request.form.get('project_id')
+    
+    if new_archived == "True":
+        list.archived=True
+        db.session.commit()
+        return jsonify({"message": "List archived!"}), 200
+    elif new_archived == "False":
+        list.archived=False
+        db.session.commit()
+        return jsonify({"message": "List restored!"}), 200
+    elif new_title:
+        list.title = new_title
+        db.session.commit()
+        return jsonify({"message": "Title updated!"}), 200
+    elif new_project_id:
+        project = Project.query.get(new_project_id)
+        if project:
+            list.project_id = new_project_id
+            db.session.commit()
+            return jsonify({"message": "Project updated!"}), 200
+        else:
+            return jsonify({"message": "Project not found!"}), 404
+    else:
+        return jsonify({"message": "No update provided!"}), 400
+
 
 
 
 
 
 # Aufgabe hinzufügen
-@app.route('/add', methods=['POST'])
-def add_task():
-    title = request.form.get('title')
-    body = request.form.get('body')
-    if title:
-        new_task = Task(title=title, body=body)
-        db.session.add(new_task)
-        db.session.commit()
-    return jsonify({"message": "Task added!"}), 200
+# @app.route('/add', methods=['POST'])
+# def add_task():
+#     title = request.form.get('title')
+#     body = request.form.get('body')
+#     if title:
+#         new_task = Task(title=title, body=body)
+#         db.session.add(new_task)
+#         db.session.commit()
+#     return jsonify({"message": "Task added!"}), 200
 
 # Aufgabe löschen
-@app.route('/delete/<int:task_id>', methods=['DELETE'])
-def delete_task(task_id):
-    task = Task.query.get_or_404(task_id)
-    db.session.delete(task)
-    db.session.commit()
-    return jsonify({"message": "Task deleted!"}), 200
+# @app.route('/delete/<int:task_id>', methods=['DELETE'])
+# def delete_task(task_id):
+#     task = Task.query.get_or_404(task_id)
+#     db.session.delete(task)
+#     db.session.commit()
+#     return jsonify({"message": "Task deleted!"}), 200
 
 # Aufgabe ändern
-@app.route('/update/<int:task_id>', methods=['POST'])
-def update_task(task_id):
-    task = Task.query.get_or_404(task_id)
+# @app.route('/update/<int:task_id>', methods=['POST'])
+# def update_task(task_id):
+#     task = Task.query.get_or_404(task_id)
 
-    new_archived = request.form.get('archived')
-    new_title = request.form.get('title')
-    new_body = request.form.get('body')
+#     new_archived = request.form.get('archived')
+#     new_title = request.form.get('title')
+#     new_body = request.form.get('body')
     
-    if new_archived == "True":
-        task.archived=True
-        db.session.commit()
-        return jsonify({"message": "Task archived!"}), 200
-    elif new_archived == "False":
-        task.archived=False
-        db.session.commit()
-        return jsonify({"message": "Task restored!"}), 200
-    elif new_title:
-        task.title = new_title
-        db.session.commit()
-        return jsonify({"message": "Title updated!"}), 200
-    elif new_body:
-        task.body = new_body
-        db.session.commit()
-        return jsonify({"message": "Body updated!"}), 200
-    else:
-        return jsonify({"message": "No update provided!"}), 400
+#     if new_archived == "True":
+#         task.archived=True
+#         db.session.commit()
+#         return jsonify({"message": "Task archived!"}), 200
+#     elif new_archived == "False":
+#         task.archived=False
+#         db.session.commit()
+#         return jsonify({"message": "Task restored!"}), 200
+#     elif new_title:
+#         task.title = new_title
+#         db.session.commit()
+#         return jsonify({"message": "Title updated!"}), 200
+#     elif new_body:
+#         task.body = new_body
+#         db.session.commit()
+#         return jsonify({"message": "Body updated!"}), 200
+#     else:
+#         return jsonify({"message": "No update provided!"}), 400
+
+
+
+
+
 
 if __name__ == '__main__':
     app.run(debug=True, host="0.0.0.0")
