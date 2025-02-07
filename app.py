@@ -19,10 +19,27 @@ class List(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
     archived = db.Column(db.Boolean, default=False)
-    is_default = db.Column(db.Boolean, default=False)
     position = db.Column(db.Integer, nullable=False, default=0)
     project_id = db.Column(db.Integer, db.ForeignKey('project.id'), nullable=False)
     tasks = db.relationship('Task', backref='list', lazy=True)
+
+    @classmethod
+    def get_next_position(cls, project_id):
+        highest_position = cls.query.filter_by(project_id=project_id, archived=False).order_by(cls.position.desc()).first()
+        if highest_position is not None and highest_position.position >= 0:
+            return highest_position.position + 1
+        else:
+            return 0
+    
+    @classmethod
+    def order_active(cls, project_id):
+        project_lists = cls.query.filter_by(project_id=project_id, archived=False).order_by(cls.position.asc()).all()
+        for idx, lst in enumerate(project_lists):
+            lst.position = idx
+        if project_lists == []:
+            return None
+        else:
+            return len(project_lists)
 
 
 class Task(db.Model):
@@ -81,7 +98,7 @@ init_db()
 # Startseite anzeigen
 @app.route('/')
 def index():
-    #Int?
+    #Default Project
     project = db.session.query(Project).filter_by(is_default=True).first()
     #Liste
     lists = db.session.query(List).filter_by(archived=False, project_id=project.id).order_by(List.position.asc()).all()
@@ -119,11 +136,7 @@ def add_list():
                 position=0
                 )
             #Position der Liste festlegen 1 höher als die letzte Position
-            highest_position = List.query.filter_by(project_id=project.id).order_by(List.position.desc()).first()
-            if highest_position is not None and highest_position >= 0:
-                new_list.position = highest_position.position + 1
-            else:
-                new_list.position = 0
+            new_list.position = List.get_next_position(project_id)
             db.session.add(new_list)
             db.session.commit()
             return jsonify({"message": "List added!"}), 200
@@ -151,20 +164,24 @@ def update_list(list_id):
         list.archived=True
         #Position der Liste auf -1 setzen
         list.position = -1
+        
         for task in tasks:
             task.archived=True
+        
+        #Projekt archivieren wenn alle Listen archiviert sind
+        if List.get_next_position(list.project_id) == 0:
+            Project.query.get(list.project_id).archived=True
+
         db.session.commit()
         return jsonify({"message": "List and Tasks archived!"}), 200
     elif new_archived == "False":
         #Liste wiederherstellen
         list.archived=False
-
         #Position der Liste festlegen 1 höher als die letzte Position
-        highest_position = List.query.filter_by(project_id=list.project_id).order_by(List.position.desc()).first()
-        if highest_position is not None and highest_position >= 0:
-            list.position = highest_position.position + 1
-        else:
-            list.position = 0
+        list.position = List.get_next_position(list.project_id)
+        #Projekt wiederherstellen
+        Project.query.get(list.project_id).archived=False
+
         #Tasks wiederherstellen
         for task in tasks:
             task.archived=False
@@ -180,6 +197,8 @@ def update_list(list_id):
         project = Project.query.get(new_project_id)
         if project:
             list.project_id = new_project_id
+            #Position der Liste festlegen 1 höher als die letzte Position im neuen Projekt
+            list.position = List.get_next_position(new_project_id)
             db.session.commit()
             return jsonify({"message": "Project updated!"}), 200
         else:
@@ -192,13 +211,12 @@ def update_list(list_id):
         #Positionen überprüfen
         if new_position >= 0 and before_position >= 0:
             #Liste aller Listen des Projekts sortiert nach Position
-            project_lists = List.query.filter_by(project_id=list.project_id).order_by(List.position.asc()).all()
+            project_lists = List.query.filter_by(project_id=list.project_id, archived=False).order_by(List.position.asc()).all()
             #Liste an neuer Position einfügen
             moved_list = project_lists.pop(before_position)
             project_lists.insert(new_position, moved_list)
             #Positionen aktualisieren
-            for idx, lst in enumerate(project_lists):
-                lst.position = idx
+            List.order_active(list.project_id)
 
             db.session.commit()
 
@@ -213,11 +231,11 @@ def update_list(list_id):
 @app.route('/list/<int:list_id>', methods=['DELETE'])
 def delete_list(list_id):
     list = List.query.get_or_404(list_id)
+    project = Project.query.get(list.project_id)
     db.session.delete(list)
-
-    project_lists = List.query.filter_by(project_id=list.project_id).order_by(List.position.asc()).all()
-    for idx, lst in enumerate(project_lists):
-        lst.position = idx
+    #Positionen aktualisieren
+    if project:
+        List.order_active(project.id)
 
     db.session.commit()
     return jsonify({"message": "List deleted!"}), 200
