@@ -25,11 +25,11 @@
           </svg>
         </button>
         <span class="navbar-text text-truncate">
-          <!-- Todo: $Projekttitel verarbeiten -->
+          <!-- $Projekttitel verarbeiten -->
           {{ project.title }}
         </span>
         <!-- Todo: Add List Button -->
-        <button type="button" class="btn btn-outline-secondary border-0 btn-sm ms-1">
+        <button type="button" class="btn btn-outline-secondary border-0 btn-sm ms-1" data-bs-toggle="modal" data-bs-target="#addListModal">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus"
             viewBox="0 0 16 16">
             <path
@@ -42,6 +42,24 @@
         </form>
       </div>
     </nav>
+
+<!-- addListModal -->
+    <div class="modal fade" id="addListModal" tabindex="-1" aria-labelledby="addListModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-body">
+            <form id="addListForm">
+              <div class="d-flex gap-3">
+                  <input type="text" class="form-control flex-grow-1" id="listTitle" name="title" placeholder="Add List" maxlength="100" required>
+                  <input type="hidden" name="project_id" value="{{ project.id }}">
+                  <button type="submit" class="btn btn-primary">Add</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
 
     <div class="row">
 
@@ -151,7 +169,7 @@
               </div>
               <div class="d-flex align-items-center">
                 <div class="d-flex gap-1 align-items-center">
-                 
+
                   <!-- Todo: d-none wenn kein body -->
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                     class="bi bi-body-text text-secondary" viewBox="0 0 16 16">
@@ -182,8 +200,8 @@
             {% endfor %}
             <!-- End task -->
              {% endfor %}
-             
-            
+
+
 
 
 

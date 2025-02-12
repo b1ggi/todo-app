@@ -149,10 +149,13 @@ def add_list():
 #Liste ändern
 @app.route('/list/<int:list_id>', methods=['POST'])
 def update_list(list_id):
+
     #Liste-Objekt
     list = List.query.get_or_404(list_id)
+
     #Tasks der Liste
     tasks = Task.query.filter_by(list_id=list_id).all()
+
     # Request-Parameter
     new_archived = request.form.get('archived')
     new_title = request.form.get('title')
@@ -162,6 +165,7 @@ def update_list(list_id):
     
     if new_archived == "True":
         list.archived=True
+
         #Position der Liste auf -1 setzen
         list.position = -1
         
@@ -175,10 +179,13 @@ def update_list(list_id):
         db.session.commit()
         return jsonify({"message": "List and Tasks archived!"}), 200
     elif new_archived == "False":
+
         #Liste wiederherstellen
         list.archived=False
+
         #Position der Liste festlegen 1 höher als die letzte Position
         list.position = List.get_next_position(list.project_id)
+
         #Projekt wiederherstellen
         Project.query.get(list.project_id).archived=False
 
@@ -187,18 +194,22 @@ def update_list(list_id):
             task.archived=False
         db.session.commit()
         return jsonify({"message": "List and Tasks restored!"}), 200
+    
     elif new_title:
         #Titel ändern
         list.title = new_title
+
         db.session.commit()
         return jsonify({"message": "Title updated!"}), 200
     elif new_project_id:
         #Projekt ändern
         project = Project.query.get(new_project_id)
+
         if project:
             list.project_id = new_project_id
             #Position der Liste festlegen 1 höher als die letzte Position im neuen Projekt
             list.position = List.get_next_position(new_project_id)
+
             db.session.commit()
             return jsonify({"message": "Project updated!"}), 200
         else:
@@ -208,13 +219,16 @@ def update_list(list_id):
         #Positionen in Integer umwandeln
         new_position = int(new_position)
         before_position = int(before_position)
+
         #Positionen überprüfen
         if new_position >= 0 and before_position >= 0:
             #Liste aller Listen des Projekts sortiert nach Position
             project_lists = List.query.filter_by(project_id=list.project_id, archived=False).order_by(List.position.asc()).all()
+
             #Liste an neuer Position einfügen
             moved_list = project_lists.pop(before_position)
             project_lists.insert(new_position, moved_list)
+            
             #Positionen aktualisieren
             List.order_active(list.project_id)
 
