@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, abort
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
@@ -6,6 +6,12 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///todo.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
+# Hilfsfunktionen
+def get_or_404(model, object_id):
+    result = db.session.get(model, object_id)
+    if result is None:
+        abort(404)
+    return result
 
 class Project(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -14,7 +20,7 @@ class Project(db.Model):
     is_default = db.Column(db.Boolean, default=False)
     lists = db.relationship('List', backref='project', lazy=True, order_by="List.position")
     
-
+# Klassen
 class List(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
@@ -49,7 +55,6 @@ class Task(db.Model):
     archived = db.Column(db.Boolean, default=False)
     list_id = db.Column(db.Integer, db.ForeignKey('list.id'), nullable=False)
     subtasks = db.relationship('Subtask', backref='task', lazy=True)
-
 class Subtask(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
@@ -58,7 +63,7 @@ class Subtask(db.Model):
     
     
 
-
+#Datenbankinitialisierungsfunktion
 def init_db():    
     with app.app_context():
         db.create_all()
@@ -128,7 +133,7 @@ def add_list():
     title = request.form.get('title')
     project_id = request.form.get('project_id')
     if title and project_id:
-        project = Project.query.get(project_id)
+        project = db.session.get(Project, project_id)
         if project:
             new_list = List(
                 title=title,
@@ -136,7 +141,7 @@ def add_list():
                 position=0
                 )
             #Position der Liste festlegen 1 höher als die letzte Position
-            new_list.position = List.get_next_position(project_id)
+            new_list.position = List.get_next_position(project_id)            
             db.session.add(new_list)
             db.session.commit()
             return jsonify({"message": "List added!"}), 200
@@ -151,7 +156,7 @@ def add_list():
 def update_list(list_id):
 
     #Liste-Objekt
-    list = List.query.get_or_404(list_id)
+    list = get_or_404(List, list_id)
 
     #Tasks der Liste
     tasks = Task.query.filter_by(list_id=list_id).all()
@@ -168,13 +173,19 @@ def update_list(list_id):
 
         #Position der Liste auf -1 setzen
         list.position = -1
-        
+        # Tasks mit archivieren
         for task in tasks:
             task.archived=True
+            # Subtasks mit archivieren
+            for subtask in Subtask.query.filter_by(task_id=task.id).all():
+                subtask.archived=True
         
         #Projekt archivieren wenn alle Listen archiviert sind
         if List.get_next_position(list.project_id) == 0:
-            Project.query.get(list.project_id).archived=True
+            db.session.get(Project, list.project_id).archived=True
+        else:
+            #Positionen aktualisieren
+            List.order_active(list.project_id)
 
         db.session.commit()
         return jsonify({"message": "List and Tasks archived!"}), 200
@@ -187,11 +198,15 @@ def update_list(list_id):
         list.position = List.get_next_position(list.project_id)
 
         #Projekt wiederherstellen
-        Project.query.get(list.project_id).archived=False
+        db.session.get(Project, list.project_id).archived=False
 
         #Tasks wiederherstellen
         for task in tasks:
             task.archived=False
+            # Subtasks wiederherstellen
+            for subtask in Subtask.query.filter_by(task_id=task.id).all():
+                subtask.archived=False
+                
         db.session.commit()
         return jsonify({"message": "List and Tasks restored!"}), 200
     
@@ -203,7 +218,7 @@ def update_list(list_id):
         return jsonify({"message": "Title updated!"}), 200
     elif new_project_id:
         #Projekt ändern
-        project = Project.query.get(new_project_id)
+        project = db.session.get(Project, new_project_id)
 
         if project:
             list.project_id = new_project_id
@@ -244,8 +259,8 @@ def update_list(list_id):
 #Liste löschen
 @app.route('/list/<int:list_id>', methods=['DELETE'])
 def delete_list(list_id):
-    list = List.query.get_or_404(list_id)
-    project = Project.query.get(list.project_id)
+    list = get_or_404(List, list_id)
+    project = db.session.get(Project, list.project_id)
     db.session.delete(list)
     #Positionen aktualisieren
     if project:

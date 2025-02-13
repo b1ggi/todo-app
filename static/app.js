@@ -1,3 +1,8 @@
+// focus addlistmodal input field
+document.getElementById('addListModal').addEventListener('shown.bs.modal', function () {
+  document.getElementById('listTitle').focus();
+});
+
 // Add new list
 document.addEventListener('DOMContentLoaded', function() {
     // Get references to the input and form
@@ -47,3 +52,29 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     });
   });
+
+
+  // Archive list
+  function archiveList(listId)
+  {
+    fetch(`/list/${listId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `archived=True`
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error("Network response was not OK");
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log("Success:", data);
+        location.reload();
+    })
+    .catch(error => {
+        console.error("Error submitting form:", error);
+    });
+  }
