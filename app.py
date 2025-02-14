@@ -58,6 +58,7 @@ class Task(db.Model):
 class Subtask(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
+    body = db.Column(db.Text, nullable=True)
     archived = db.Column(db.Boolean, default=False)
     task_id = db.Column(db.Integer, db.ForeignKey('task.id'), nullable=False)
     
@@ -125,7 +126,6 @@ def index():
             subtasks_by_task[single_task.id] = task_subtasks
 
     return render_template('index.html',project=project, lists=lists, tasks_by_list=tasks_by_list, subtasks_by_task=subtasks_by_task)
-
 
 #Liste hinzufügen
 @app.route('/list', methods=['POST'])
