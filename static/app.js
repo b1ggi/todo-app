@@ -3,6 +3,56 @@ document.getElementById('addListModal').addEventListener('shown.bs.modal', funct
   document.getElementById('listTitle').focus();
 });
 
+//Collapse list
+document.addEventListener('DOMContentLoaded', function() {
+  const collapseElements = document.querySelectorAll('.collapse');
+  collapseElements.forEach(elem => {
+    
+    elem.addEventListener('hide.bs.collapse', function() {
+        // Extract the list id from the collapse element's id (e.g., "collapse5" -> "5")
+        const listId = this.id.replace('collapse', '');
+        // Send the expanded state (collapsed is false)
+        fetch(`/list/${listId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: 'collapsed=True'
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Network response was not OK");
+            }
+            return response.json();
+        })
+        .then(data => console.log("List collapsed:", data))
+        .catch(error => console.error("Error updating collapsed status:", error));
+    });
+    
+    elem.addEventListener('show.bs.collapse', function() {
+        // Extract the list id from the collapse element's id
+        const listId = this.id.replace('collapse', '');
+        // Send the collapsed state (collapsed is true)
+        fetch(`/list/${listId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: 'collapsed=False'
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Network response was not OK");
+            }
+            return response.json();
+        })
+        .then(data => console.log("List expanded:", data))
+        .catch(error => console.error("Error updating collapsed status:", error));
+    });
+  });
+});
+
+
 // Add new list
 document.addEventListener('DOMContentLoaded', function() {
     // Get references to the input and form

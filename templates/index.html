@@ -65,18 +65,17 @@
 
       <!-- Start lane -->
        <!-- For Schleife zum durchlaufen der Listen -->
-      {% for list in lists %}
+      {% for list in lists %}   
       <div class="col-12 col-lg-4">
         <div class="card mb-2">
-
           <div class="card-header bg-light d-flex justify-content-between align-items-center py-1 px-2">
             <h3 class="card-title h6 mb-0 text-truncate">
               <!-- Todo: $Listentitel änderbar -->
               {{ list.title }}
             </h3>
             <div class="btn-group">
-              <!-- Todo: Collapse  -->
-              <button type="button" class="btn btn-outline-secondary btn-sm border-0">
+              <!-- Collapse  -->
+              <button type="button" class="btn btn-outline-secondary btn-sm border-0" data-bs-toggle="collapse" data-bs-target="#collapse{{ list.id }}" aria-expanded="false" aria-controls="collapse{{ list.id }}">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                   class="bi bi-caret-down" viewBox="0 0 16 16">
                   <path
@@ -103,11 +102,13 @@
               </button>
             </div>
           </div>
-
+          <!-- Einklappen wenn list.collapsed nicht true -->
+          <div class="collapse {% if not list.collapsed %} show {% endif %} " id="collapse{{ list.id }}">
           <!-- Todo: change $id -->
           <div class="d-flex-column">
 
             <!-- Start tasks -->
+
              {% set list_tasks = tasks_by_list.get(list.id, []) %}
              {% for task in list_tasks %}
 
@@ -209,6 +210,9 @@
 
 
           </div>
+
+          </div>
+
         </div>
       </div>
       {% endfor %}

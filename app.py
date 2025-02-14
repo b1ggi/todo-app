@@ -26,6 +26,7 @@ class List(db.Model):
     title = db.Column(db.String(100), nullable=False)
     archived = db.Column(db.Boolean, default=False)
     position = db.Column(db.Integer, nullable=False, default=0)
+    collapsed = db.Column(db.Boolean, default=False)
     project_id = db.Column(db.Integer, db.ForeignKey('project.id'), nullable=False)
     tasks = db.relationship('Task', backref='list', lazy=True)
 
@@ -47,7 +48,6 @@ class List(db.Model):
         else:
             return len(project_lists)
 
-
 class Task(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
@@ -55,6 +55,7 @@ class Task(db.Model):
     archived = db.Column(db.Boolean, default=False)
     list_id = db.Column(db.Integer, db.ForeignKey('list.id'), nullable=False)
     subtasks = db.relationship('Subtask', backref='task', lazy=True)
+
 class Subtask(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
@@ -167,6 +168,7 @@ def update_list(list_id):
     new_project_id = request.form.get('project_id')
     before_position = request.form.get('before_position')
     new_position = request.form.get('position')
+    new_collapsed = request.form.get('collapsed')
     
     if new_archived == "True":
         list.archived=True
@@ -253,6 +255,16 @@ def update_list(list_id):
 
         else:
             return jsonify({"message": "Position must be greater or equal to 0!"}), 400
+    elif new_collapsed:
+        #Collapsed-Status ändern
+        if new_collapsed == "True":
+            list.collapsed=True
+            db.session.commit()
+            return jsonify({"message": "List collapsed!"}), 200
+        elif new_collapsed == "False":
+            list.collapsed=False
+            db.session.commit()
+            return jsonify({"message": "List expanded!"}), 200
     else:
         return jsonify({"message": "No update provided!"}), 400
     
