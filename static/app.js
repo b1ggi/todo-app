@@ -8,6 +8,36 @@ document.getElementById('addCardModal').addEventListener('shown.bs.modal', funct
   document.getElementById('cardTitle').focus();
 });
 
+//fill addlistmodal hidden project_id with actual project_id
+document.addEventListener('DOMContentLoaded', function() {
+  // When the addListModal is about to be shown, update its hidden input
+  const addListModalEl = document.getElementById('addListModal');
+  addListModalEl.addEventListener('show.bs.modal', function(event) {
+    // Button that triggered the modal
+    const button = event.relatedTarget;
+    // Extract info from data-project-id attribute
+    const projectId = button.getAttribute('data-project-id');
+    // Update the modal's hidden input value
+    addListModalEl.querySelector('input[name="project_id"]').value = projectId;
+    console.log("Modal opened for project id:", projectId);
+  });
+});
+
+//fill addcardmodal hidden list_id with actual list_id
+document.addEventListener('DOMContentLoaded', function() {
+  // When the addCardModal is about to be shown, update its hidden input
+  const addCardModalEl = document.getElementById('addCardModal');
+  addCardModalEl.addEventListener('show.bs.modal', function(event) {
+    // Button that triggered the modal
+    const button = event.relatedTarget;
+    // Extract info from data-list-id attribute
+    const listId = button.getAttribute('data-list-id');
+    // Update the modal's hidden input value
+    addCardModalEl.querySelector('input[name="list_id"]').value = listId;
+    console.log("Modal opened for list id:", listId);
+  });
+});
+
 //Collapse list
 document.addEventListener('DOMContentLoaded', function() {
   const collapseElements = document.querySelectorAll('.collapse');

@@ -30,7 +30,7 @@
           {{ project.title }}
         </span>
         <!-- Add List Button -->
-        <button type="button" class="btn btn-outline-secondary border-0 btn-sm ms-1" data-bs-toggle="modal" data-bs-target="#addListModal">
+        <button type="button" class="btn btn-outline-secondary border-0 btn-sm ms-1" data-bs-toggle="modal" data-bs-target="#addListModal" data-project-id="{{ project.id }}">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus"
             viewBox="0 0 16 16">
             <path
@@ -39,27 +39,12 @@
         </button>
         <!-- Todo: Search -->
         <form class="d-flex ms-auto" role="search">
-          <input class="form-control  my-1 " type="search" placeholder="Search" aria-label="Search">
+          <input class="form-control  my-1 " type="search"  name="search" id="search" placeholder="Search" aria-label="Search">
         </form>
       </div>
     </nav>
 
-<!-- addListModal -->
-    <div class="modal fade" id="addListModal" tabindex="-1" aria-labelledby="addListModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-body">
-            <form id="addListForm">
-              <div class="d-flex gap-3">
-                  <input type="text" class="form-control flex-grow-1" id="listTitle" name="title" placeholder="Add List" maxlength="100" required autofocus>
-                  <input type="hidden" name="project_id" value="{{ project.id }}">
-                  <button type="submit" class="btn btn-primary">Add</button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
+
 
 
     <div class="row">
@@ -94,7 +79,7 @@
               </button>
 
               <!-- Add Card -->
-              <button type="button" class="btn btn-outline-secondary btn-sm border-0" data-bs-toggle="modal" data-bs-target="#addCardModal">
+              <button type="button" class="btn btn-outline-secondary btn-sm border-0" data-bs-toggle="modal" data-bs-target="#addCardModal" data-list-id="{{ list.id }}">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus"
                   viewBox="0 0 16 16">
                   <path
@@ -104,24 +89,6 @@
             </div>
           </div>
 
-          <!-- addCardModal -->
-          <div class="modal fade" id="addCardModal" tabindex="-1" aria-labelledby="addCardModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-              <div class="modal-content">
-                <div class="modal-body">
-                  <form id="addCardForm">
-                    <div class="d-flex gap-3">
-                      <input type="hidden" name="list_id" value="{{ list.id }}">
-                      <input type="text" class="form-control flex-grow-1" id="cardTitle" name="title" placeholder="Add Card Title" maxlength="100" required autofocus>
-                      <button type="submit" class="btn btn-primary">Add</button>
-                    </div>
-                    <div class="d-flex mt-3 border" id="editor" name="body" style="height: 400px">
-                    </div>
-                  </form>
-                </div>
-              </div>
-            </div>
-          </div>
 
           <!-- Einklappen wenn list.collapsed nicht true -->
           <div class="collapse {% if not list.collapsed %} show {% endif %} " id="collapse{{ list.id }}">
@@ -135,7 +102,7 @@
 
             <div class="card p-2">
               <div class="d-flex justify-content-between align-items-center">
-                <!-- Todo: $Card title -->
+                <!-- $Card title -->
                 <span class="text-truncate">{{ task.title }} </span>
               </div>
               <div class="d-flex align-items-center">
@@ -241,6 +208,44 @@
     </div>
   </div>
   </div>
+
+<!-- addListModal -->
+<div class="modal fade" id="addListModal" tabindex="-1" aria-labelledby="addListModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+        <form id="addListForm">
+          <div class="d-flex gap-3">
+              <input type="text" class="form-control flex-grow-1" id="listTitle" name="title" placeholder="Add List" maxlength="100" required autofocus>
+              <input type="hidden" name="project_id" value="">
+              <button type="submit" class="btn btn-primary">Add</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- addCardModal -->
+<div class="modal fade" id="addCardModal" tabindex="-1" aria-labelledby="addCardModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+        <form id="addCardForm">
+          <div class="d-flex gap-3">
+            <input type="text" class="form-control flex-grow-1" id="cardTitle" name="title" placeholder="Add Card Title" maxlength="100" required autofocus>
+            <!-- hidden input will be updated via javascript -->
+            <input type="hidden" name="list_id" value="">
+            <button type="submit" class="btn btn-primary">Add</button>
+          </div>
+          <div class="d-flex mt-3 border" id="editor" name="body" style="height: 400px">
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+  
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
     crossorigin="anonymous"></script>
