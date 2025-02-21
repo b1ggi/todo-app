@@ -9,6 +9,7 @@
     integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
   <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}" type="image/x-icon">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.bubble.css"/>
 </head>
 
 <body>
@@ -92,8 +93,8 @@
                 </svg>
               </button>
 
-              <!-- Todo: Add Card -->
-              <button type="button" class="btn btn-outline-secondary btn-sm border-0">
+              <!-- Add Card -->
+              <button type="button" class="btn btn-outline-secondary btn-sm border-0" data-bs-toggle="modal" data-bs-target="#addCardModal">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus"
                   viewBox="0 0 16 16">
                   <path
@@ -102,6 +103,26 @@
               </button>
             </div>
           </div>
+
+          <!-- addCardModal -->
+          <div class="modal fade" id="addCardModal" tabindex="-1" aria-labelledby="addCardModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-body">
+                  <form id="addCardForm">
+                    <div class="d-flex gap-3">
+                      <input type="hidden" name="list_id" value="{{ list.id }}">
+                      <input type="text" class="form-control flex-grow-1" id="cardTitle" name="title" placeholder="Add Card Title" maxlength="100" required autofocus>
+                      <button type="submit" class="btn btn-primary">Add</button>
+                    </div>
+                    <div class="d-flex mt-3 border" id="editor" name="body" style="height: 400px">
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <!-- Einklappen wenn list.collapsed nicht true -->
           <div class="collapse {% if not list.collapsed %} show {% endif %} " id="collapse{{ list.id }}">
           <!-- Todo: change $id -->
@@ -224,6 +245,7 @@
     integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
     crossorigin="anonymous"></script>
   <!-- <script src='https://cdnjs.cloudflare.com/ajax/libs/dragula/3.7.3/dragula.min.js'></script> -->
+  <script src="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.js"></script>
   <script src="{{ url_for('static', filename='app.js') }}"></script>
 </body>
 

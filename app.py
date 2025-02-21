@@ -282,24 +282,29 @@ def delete_list(list_id):
     return jsonify({"message": "List deleted!"}), 200
 
 
+#Aufgabe hinzufügen
+@app.route('/card', methods=['POST'])
+def add_task():
+    title = request.form.get('title')
+    list_id = request.form.get('list_id')
+    body = request.form.get('body')
+    if title and list_id:
+        new_task = Task(
+            title=title,
+            list_id=list_id,
+            body=body
+            )
+        db.session.add(new_task)
+        db.session.commit()
+        return jsonify({"message": "Task added!"}), 200
+    else:
+        return jsonify({"message": "Title and list_id are required!"}), 400
 
 
 
 
 
 
-
-
-# Aufgabe hinzufügen
-# @app.route('/add', methods=['POST'])
-# def add_task():
-#     title = request.form.get('title')
-#     body = request.form.get('body')
-#     if title:
-#         new_task = Task(title=title, body=body)
-#         db.session.add(new_task)
-#         db.session.commit()
-#     return jsonify({"message": "Task added!"}), 200
 
 # Aufgabe löschen
 # @app.route('/delete/<int:task_id>', methods=['DELETE'])

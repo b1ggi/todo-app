@@ -3,6 +3,11 @@ document.getElementById('addListModal').addEventListener('shown.bs.modal', funct
   document.getElementById('listTitle').focus();
 });
 
+// focus addcardmodal input field
+document.getElementById('addCardModal').addEventListener('shown.bs.modal', function () {
+  document.getElementById('cardTitle').focus();
+});
+
 //Collapse list
 document.addEventListener('DOMContentLoaded', function() {
   const collapseElements = document.querySelectorAll('.collapse');
@@ -128,3 +133,65 @@ document.addEventListener('DOMContentLoaded', function() {
         console.error("Error submitting form:", error);
     });
   }
+
+
+// Add new card
+document.addEventListener('DOMContentLoaded', function() {
+  const addCardForm = document.getElementById('addCardForm');
+
+  addCardForm.addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent default form submission
+
+    // Gather form data
+    const formData = new FormData(addCardForm);
+    // Append the card description from Quill's editor content
+    const cardDescription = quill.root.innerHTML;
+    if (cardDescription !== '<p><br></p>') {
+      // If the description is not empty, append body to the form data
+      formData.append('body', cardDescription);
+    }
+    
+
+    // Send form data to your API endpoint for adding a new card
+    fetch('/card', { // Adjust the endpoint as needed
+      method: 'POST',
+      body: formData
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error("Network response was not OK");
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log("Card added successfully:", data);
+      // Hide the modal after a successful submission
+      const modalEl = document.getElementById('addCardModal');
+      const modalInstance = bootstrap.Modal.getInstance(modalEl);
+      if (modalInstance) {
+        modalInstance.hide();
+      } else {
+        // If no instance exists, create one and then hide it
+        new bootstrap.Modal(modalEl).hide();
+      }
+      location.reload(); // Reload the page to update the card list
+    })
+    .catch(error => {
+      console.error("Error submitting card form:", error);
+      // Optionally, display an error message to the user
+    });
+  });
+});
+
+
+
+
+
+
+
+
+// Quill Text Editor
+const quill = new Quill('#editor', {
+    theme: 'bubble',
+    placeholder: 'Add Card Description'
+  });
