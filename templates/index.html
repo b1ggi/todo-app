@@ -117,20 +117,32 @@
                   </svg>
                 </div>
                 <div class="ms-auto">
-                  <!-- Todo: Wenn $onHold -->
-                  <span class="badge bg-primary text-white">On hold</span>
-                  <!-- Todo: entweder wenn $prio high -->
-                  <span class="badge bg-danger text-white">High</span>
-                  <!-- Todo: oder wenn $prio low, oder nichts-->
-                  <span class="badge bg-success text-white d-none">Low</span>
-                  <!-- Todo: Dreipunkt Button -->
-                  <button class="btn btn-outline-secondary btn-sm border-0">
+                  <!-- Wenn $onHold -->
+                  <span class="badge bg-primary text-white{% if task.onhold == False %} d-none {% endif %}">On hold</span>
+                  <!-- entweder wenn $prio high -->
+                  <span class="badge bg-danger text-white {% if task.prio == 0 or task.prio == 2 %} d-none {% endif %}">High</span>
+                  <!-- oder wenn $prio low, oder nichts-->
+                  <span class="badge bg-success text-white {% if task.prio == 0 or task.prio == 1 %} d-none {% endif %}">Low</span>
+                  <!-- Dreipunkt Button -->
+
+                  <div class="dropdown d-inline-block">
+                  <button class="btn btn-outline-secondary btn-sm border-0 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                       class="bi bi-three-dots" viewBox="0 0 16 16">
                       <path
                         d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3" />
                     </svg>
                   </button>
+                  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-lg-start">
+                    <li><a class="dropdown-item task-action" data-task-id="{{ task.id }}" data-action="onhold" href="#">On Hold</a></li>
+                    <li><a class="dropdown-item task-action" data-task-id="{{ task.id }}" data-action="archive" href="#">Archive</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item task-action" data-task-id="{{ task.id }}" data-action="prio_high" href="#">Prio: High</a></li>
+                    <li><a class="dropdown-item task-action" data-task-id="{{ task.id }}" data-action="prio_normal" href="#">Prio: Normal</a></li>
+                    <li><a class="dropdown-item task-action" data-task-id="{{ task.id }}" data-action="prio_low" href="#">Prio: Low</a></li>
+                  </ul>
+                </div>
+
                 </div>
               </div>
               <!-- Todo: Subtask Progress, d-none wenn kein subtask -->

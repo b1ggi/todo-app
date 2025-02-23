@@ -215,7 +215,44 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
+// Update Card
+document.addEventListener('DOMContentLoaded', function() {
+  const taskActionItems = document.querySelectorAll('.dropdown-item.task-action');
 
+  taskActionItems.forEach(item => {
+    item.addEventListener('click', function(event) {
+      event.preventDefault(); // Prevent the default anchor behavior
+
+      // Retrieve task id and action from the clicked element
+      const taskId = this.getAttribute('data-task-id');
+      const action = this.getAttribute('data-action');
+      console.log("Task ID:", taskId, "Action:", action);
+
+      // Send data to the Flask endpoint using fetch API
+      fetch(`/card/${taskId}`, { // Adjust the endpoint as needed
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: `action=${encodeURIComponent(action)}`
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error("Network response was not OK");
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log("Task updated:", data);
+        // Optionally, update the UI or force a page reload:
+        location.reload();
+      })
+      .catch(error => {
+        console.error("Error updating task:", error);
+      });
+    });
+  });
+});
 
 
 

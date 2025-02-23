@@ -55,6 +55,9 @@ class Task(db.Model):
     title = db.Column(db.String(100), nullable=False)
     body = db.Column(db.Text, nullable=True)
     archived = db.Column(db.Boolean, default=False)
+    onhold = db.Column(db.Boolean, default=False)
+    # 0 = normal, 1 = high, 2 = low
+    prio = db.Column(db.Integer, default=0)
     list_id = db.Column(db.Integer, db.ForeignKey('list.id'), nullable=False)
     subtasks = db.relationship('Subtask', backref='task', lazy=True)
 
@@ -301,6 +304,37 @@ def add_task():
         return jsonify({"message": "Task added!"}), 200
     else:
         return jsonify({"message": "Title and list_id are required!"}), 400
+
+
+#Aufgabe ändern
+@app.route('/card/<int:task_id>', methods=['PUT'])
+def update_task(task_id):
+    task = get_or_404(Task, task_id)
+
+    action = request.form.get('action')
+    
+    if action == "archive":
+        task.archived=not task.archived
+        db.session.commit()
+        return jsonify({"message": "Task toggle archived!"}), 200
+    elif action == "onhold":
+        task.onhold = not task.onhold
+        db.session.commit()
+        return jsonify({"message": "Task toggle on hold!"}), 200
+    elif action == "prio_high":
+        task.prio = 1
+        db.session.commit()
+        return jsonify({"message": "High Priority set!"}), 200
+    elif action == "prio_normal":
+        task.prio = 0
+        db.session.commit()
+        return jsonify({"message": "Normal Priority set!"}), 200
+    elif action == "prio_low":
+        task.prio = 2
+        db.session.commit()
+        return jsonify({"message": "Low Priority set!"}), 200
+    else:
+        return jsonify({"message": "No update provided!"}), 400
 
 
 
