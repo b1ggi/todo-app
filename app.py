@@ -314,7 +314,7 @@ def update_task(task_id):
     action = request.form.get('action')
     
     if action == "archive":
-        task.archived=not task.archived
+        task.archived = not task.archived
         db.session.commit()
         return jsonify({"message": "Task toggle archived!"}), 200
     elif action == "onhold":
@@ -333,6 +333,19 @@ def update_task(task_id):
         task.prio = 2
         db.session.commit()
         return jsonify({"message": "Low Priority set!"}), 200
+    elif action == None:
+        new_title = request.form.get('title')
+        new_body = request.form.get('body')
+        if new_title or new_body:
+            task.title = new_title
+            if new_body == '':
+                task.body = None
+            else:
+                task.body = new_body
+            db.session.commit()
+            return jsonify({"message": "Title and Body updated!"}), 200
+        else:
+            return jsonify({"message": "No update provided!"}), 400
     else:
         return jsonify({"message": "No update provided!"}), 400
 

@@ -5,3 +5,21 @@ html, body {
 .dropdown-toggle::after {
   display: none;
 }
+
+
+.card .stretched-link {
+  /* Lower the stacking order */
+  z-index: 1;
+  pointer-events: auto;
+}
+
+.card button {
+  /* Ensure interactive elements are above the stretched link */
+  position: relative;
+  z-index: 2;
+}
+
+.card .dropdown-menu {
+  /* Ensure dropdowns are above the stretched link */
+  z-index: 3;
+}

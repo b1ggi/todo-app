@@ -99,7 +99,6 @@
 
              {% set list_tasks = tasks_by_list.get(list.id, []) %}
              {% for task in list_tasks %}
-
             <div class="card p-2">
               <div class="d-flex justify-content-between align-items-center">
                 <!-- $Card title -->
@@ -134,7 +133,7 @@
                     </svg>
                   </button>
                   <ul class="dropdown-menu dropdown-menu-end dropdown-menu-lg-start">
-                    <li><a class="dropdown-item task-action" data-task-id="{{ task.id }}" data-action="onhold" href="#">On Hold</a></li>
+                    <li><a class="dropdown-item task-action" data-task-id="{{ task.id }}" data-action="onhold" href="#">{% if task.onhold == True %}Undo: {% endif %}On Hold</a></li>
                     <li><a class="dropdown-item task-action" data-task-id="{{ task.id }}" data-action="archive" href="#">Archive</a></li>
                     <li><hr class="dropdown-divider"></li>
                     <li><a class="dropdown-item task-action" data-task-id="{{ task.id }}" data-action="prio_high" href="#">Prio: High</a></li>
@@ -151,6 +150,7 @@
                   aria-valuemax="100">
                 </div>
               </div>
+              <a href="#" class="stretched-link" data-bs-toggle="modal" data-bs-target="#updateCardModal" data-task-id="{{ task.id }}" data-task-title="{{ task.title }}" data-task-body="{{ task.body }}"></a>
             </div>
 
             <!-- Subtask -->
@@ -251,6 +251,25 @@
             <button type="submit" class="btn btn-primary">Add</button>
           </div>
           <div class="d-flex mt-3 border" id="editor" name="body" style="height: 400px">
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- updateCardModal -->
+<div class="modal fade" id="updateCardModal" tabindex="-1" aria-labelledby="updateCardModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+        <form id="updateCardForm">
+          <div class="d-flex gap-3">
+            <input type="text" class="form-control flex-grow-1" id="updateCardTitle" name="title" placeholder="Update Card Title" maxlength="100" value="" required autofocus>
+            <input type="hidden" name="task_id" value="">
+            <button type="submit" class="btn btn-primary">Update</button>
+          </div>
+          <div class="d-flex mt-3 border" id="updateEditor" name="body" value="" style="height: 400px">
           </div>
         </form>
       </div>

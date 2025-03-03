@@ -38,6 +38,23 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 
+//fill updatecardmodal hidden task_id with actual task_id and title and body with actual values
+document.addEventListener('DOMContentLoaded', function() {
+  // When the updateCardModal is about to be shown, update its hidden input
+  const updateCardModalEl = document.getElementById('updateCardModal');
+  updateCardModalEl.addEventListener('show.bs.modal', function(event) {
+    // Button that triggered the modal
+    const button = event.relatedTarget;
+    // Extract info from data-task-id attribute
+    const taskId = button.getAttribute('data-task-id');
+    // Update the modal's hidden input value
+    updateCardModalEl.querySelector('input[name="task_id"]').value = taskId;
+    // Update the modal's title input value
+    updateCardModalEl.querySelector('input[name="title"]').value = button.getAttribute('data-task-title');
+    console.log("Modal opened for task id:", taskId);
+  });
+});
+
 //Collapse list
 document.addEventListener('DOMContentLoaded', function() {
   const collapseElements = document.querySelectorAll('.collapse');
@@ -215,7 +232,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
-// Update Card
+// Update Card Options
 document.addEventListener('DOMContentLoaded', function() {
   const taskActionItems = document.querySelectorAll('.dropdown-item.task-action');
 
@@ -254,11 +271,89 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 
+// Update Card Title/Body
+document.addEventListener('DOMContentLoaded', function() {
+  const updateCardForm = document.getElementById('updateCardForm');
+
+  updateCardForm.addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent default form submission
+    const taskId = updateCardForm.querySelector('input[name="task_id"]').value;
+    // Gather form data
+    const formData = new FormData(updateCardForm);
+    // Append the card description from Quill's editor content
+    const cardDescription = updateQuill.root.innerHTML;
+    if (cardDescription !== '<p><br></p>') {
+      // If the description is not empty, append body to the form data
+      formData.append('body', cardDescription);
+    }
+    else{
+      formData.append('body', '');
+    }
+
+    // Send form data to your API endpoint for updating a card
+    fetch(`/card/${taskId}`, {
+      method: 'PUT',
+      body: formData
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error("Network response was not OK");
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log("Card updated successfully:", data);
+      // Hide the modal after a successful submission
+      const modalEl = document.getElementById('updateCardModal');
+      const modalInstance = bootstrap.Modal.getInstance(modalEl);
+      if (modalInstance) {
+        modalInstance.hide();
+      } else {
+        // If no instance exists, create one and then hide it
+        new bootstrap.Modal(modalEl).hide();
+      }
+      location.reload(); // Reload the page to update the card list
+    })
+    .catch(error => {
+      console.error("Error submitting card form:", error);
+      // Optionally, display an error message to the user
+    });
+  });
+});
+
 
 
 
 // Quill Text Editor
-const quill = new Quill('#editor', {
+
+let quill;
+let updateQuill;
+
+document.addEventListener('DOMContentLoaded', function() {
+  quill = new Quill('#editor', {
     theme: 'bubble',
     placeholder: 'Add Card Description'
   });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+  updateQuill = new Quill('#updateEditor', {
+    theme: 'bubble',
+    placeholder: 'Add Card Description'
+  });
+
+  // When updateCardModal is shown, prefill the editor.
+  const updateModalEl = document.getElementById('updateCardModal');
+  updateModalEl.addEventListener('show.bs.modal', function(event) {
+    // The button that triggered the modal
+    const button = event.relatedTarget;
+    const taskBody = button.getAttribute('data-task-body') || '';
+    // Use Quill's clipboard API to insert HTML content
+    if (taskBody !== 'None'){
+      updateQuill.clipboard.dangerouslyPasteHTML(taskBody);
+    }
+    else{
+      updateQuill.clipboard.dangerouslyPasteHTML('');
+    }
+  });
+});
