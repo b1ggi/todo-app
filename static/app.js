@@ -355,5 +355,6 @@ document.addEventListener('DOMContentLoaded', function() {
     else{
       updateQuill.clipboard.dangerouslyPasteHTML('');
     }
+    updateQuill.focus();
   });
 });
