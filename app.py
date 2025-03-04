@@ -59,14 +59,21 @@ class Task(db.Model):
     # 0 = normal, 1 = high, 2 = low
     prio = db.Column(db.Integer, default=0)
     list_id = db.Column(db.Integer, db.ForeignKey('list.id'), nullable=False)
-    subtasks = db.relationship('Subtask', backref='task', lazy=True)
+    # parent task
+    parent_id = db.Column(db.Integer, db.ForeignKey('task.id'))
+    parent   = db.relationship('Task', back_populates='subtasks', remote_side=[id])
+    subtasks = db.relationship('Task', back_populates='parent', lazy='select')
 
-class Subtask(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(100), nullable=False)
-    body = db.Column(db.Text, nullable=True)
-    archived = db.Column(db.Boolean, default=False)
-    task_id = db.Column(db.Integer, db.ForeignKey('task.id'), nullable=False)
+# kann weg wenn subtasks funktionieren
+# class Subtask(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     title = db.Column(db.String(100), nullable=False)
+#     body = db.Column(db.Text, nullable=True)
+#     archived = db.Column(db.Boolean, default=False)
+#     onhold = db.Column(db.Boolean, default=False)
+#     prio = db.Column(db.Integer, default=0)
+
+#     task_id = db.Column(db.Integer, db.ForeignKey('task.id'), nullable=False)
     
     
 
@@ -97,9 +104,8 @@ def init_db():
             db.session.add(dev_card)
             db.session.flush()
             #für die Entwicklung: füge subcardcard zu, TODO: später entfernen
-            dev_subcard = Subtask(title="Entwickler-Subtask", task_id=dev_card.id)
+            dev_subcard = Task(title="Entwickler-Subtask", list_id=default_list.id, parent_id=dev_card.id)
             db.session.add(dev_subcard)     
-
             db.session.commit()
 
 
@@ -117,21 +123,20 @@ def index():
 
     #Dict
     tasks_by_list = {}
-    subtasks_by_task = {}
+    # subtasks_by_task = {} kann weg wenn subtasks funktionieren
 
     for single_list in lists:
         #Liste
         list_tasks = db.session.query(Task).filter_by(archived=False, list_id=single_list.id).all()
-
         tasks_by_list[single_list.id] = list_tasks
 
-        for single_task in list_tasks:
-            #Liste
-            task_subtasks = db.session.query(Subtask).filter_by(archived=False, task_id=single_task.id).all()
+        # for single_task in list_tasks: kann weg wenn subtasks funktionieren
+        #     #Liste
+        #     task_subtasks = db.session.query(Subtask).filter_by(archived=False, task_id=single_task.id).all()
 
-            subtasks_by_task[single_task.id] = task_subtasks
+        #     subtasks_by_task[single_task.id] = task_subtasks
 
-    return render_template('index.html',project=project, lists=lists, tasks_by_list=tasks_by_list, subtasks_by_task=subtasks_by_task)
+    return render_template('index.html',project=project, lists=lists, tasks_by_list=tasks_by_list)
 
 #Liste hinzufügen
 @app.route('/list', methods=['POST'])
@@ -183,9 +188,9 @@ def update_list(list_id):
         # Tasks mit archivieren
         for task in tasks:
             task.archived=True
-            # Subtasks mit archivieren
-            for subtask in Subtask.query.filter_by(task_id=task.id).all():
-                subtask.archived=True
+            # # Subtasks mit archivieren kann weg wenn subtasks funktionieren
+            # for subtask in Subtask.query.filter_by(task_id=task.id).all():
+            #     subtask.archived=True
         
         #Projekt archivieren wenn alle Listen archiviert sind
         if List.get_next_position(list.project_id) == 0:
@@ -210,9 +215,9 @@ def update_list(list_id):
         #Tasks wiederherstellen
         for task in tasks:
             task.archived=False
-            # Subtasks wiederherstellen
-            for subtask in Subtask.query.filter_by(task_id=task.id).all():
-                subtask.archived=False
+            # # Subtasks wiederherstellen kann weg wenn subtasks funktionieren
+            # for subtask in Subtask.query.filter_by(task_id=task.id).all():
+            #     subtask.archived=False
                 
         db.session.commit()
         return jsonify({"message": "List and Tasks restored!"}), 200
@@ -229,7 +234,7 @@ def update_list(list_id):
 
         if project:
             list.project_id = new_project_id
-            #Position der Liste festlegen 1 höher als die letzte Position im neuen Projekt
+            #Position der Liste festlegen auf 1 höher als die letzte Position im neuen Projekt
             list.position = List.get_next_position(new_project_id)
 
             db.session.commit()
