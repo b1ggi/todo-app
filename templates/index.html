@@ -9,6 +9,7 @@
     integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
   <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}" type="image/x-icon">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.bubble.css"/>
 </head>
 
 <body>
@@ -25,11 +26,12 @@
           </svg>
         </button>
         <span class="navbar-text text-truncate">
-          <!-- Todo: $Projekttitel verarbeiten -->
+          <!-- $Projekttitel verarbeiten -->
           {{ project.title }}
         </span>
-        <!-- Todo: Add List Button -->
-        <button type="button" class="btn btn-outline-secondary border-0 btn-sm ms-1">
+        <!-- Add List Button -->
+        <button type="button" class="btn btn-outline-secondary border-0 btn-sm ms-1" data-bs-toggle="modal"
+          data-bs-target="#addListModal" data-project-id="{{ project.id }}">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus"
             viewBox="0 0 16 16">
             <path
@@ -38,7 +40,8 @@
         </button>
         <!-- Todo: Search -->
         <form class="d-flex ms-auto" role="search">
-          <input class="form-control  my-1 " type="search" placeholder="Search" aria-label="Search">
+          <input class="form-control  my-1 " type="search" name="search" id="search" placeholder="Search"
+            aria-label="Search">
         </form>
       </div>
     </nav>
@@ -46,35 +49,39 @@
     <div class="row">
 
       <!-- Start lane -->
-       <!-- For Schleife zum durchlaufen der Listen -->
+      <!-- For Schleife zum durchlaufen der Listen -->
       {% for list in lists %}
       <div class="col-12 col-lg-4">
         <div class="card mb-2">
-
           <div class="card-header bg-light d-flex justify-content-between align-items-center py-1 px-2">
             <h3 class="card-title h6 mb-0 text-truncate">
               <!-- Todo: $Listentitel änderbar -->
               {{ list.title }}
             </h3>
             <div class="btn-group">
-              <!-- Todo: Collapse  -->
-              <button type="button" class="btn btn-outline-secondary btn-sm border-0">
+              <!-- Collapse  -->
+              <button type="button" class="btn btn-outline-secondary btn-sm border-0" data-bs-toggle="collapse"
+                data-bs-target="#collapse{{ list.id }}" aria-expanded="false" aria-controls="collapse{{ list.id }}">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                   class="bi bi-caret-down" viewBox="0 0 16 16">
                   <path
                     d="M3.204 5h9.592L8 10.481zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659" />
                 </svg>
               </button>
-              <!-- Todo: Archive -->
-              <button type="button" class="btn btn-outline-secondary btn-sm border-0">
+
+              <!-- Archive -->
+              <button type="button" class="btn btn-outline-secondary btn-sm border-0"
+                onclick="archiveList({{ list.id }})">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-archive"
                   viewBox="0 0 16 16">
                   <path
                     d="M0 2a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1v7.5a2.5 2.5 0 0 1-2.5 2.5h-9A2.5 2.5 0 0 1 1 12.5V5a1 1 0 0 1-1-1zm2 3v7.5A1.5 1.5 0 0 0 3.5 14h9a1.5 1.5 0 0 0 1.5-1.5V5zm13-3H1v2h14zM5 7.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5" />
                 </svg>
               </button>
-              <!-- Todo: Add Card -->
-              <button type="button" class="btn btn-outline-secondary btn-sm border-0">
+
+              <!-- Add Card -->
+              <button type="button" class="btn btn-outline-secondary btn-sm border-0" data-bs-toggle="modal"
+                data-bs-target="#addCardModal" data-list-id="{{ list.id }}">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus"
                   viewBox="0 0 16 16">
                   <path
@@ -84,99 +91,160 @@
             </div>
           </div>
 
-          <!-- Todo: change $id -->
-          <div class="tasks" id="Listentitel-id">
 
-            <!-- Start tasks -->
-             {% set list_tasks = all_tasks.get(list.id, []) %}
-             {% for task in list_tasks %}
+          <!-- Einklappen wenn list.collapsed nicht true -->
+          <div class="collapse {% if not list.collapsed %} show {% endif %} " id="collapse{{ list.id }}">
+            <!-- Todo: change $id -->
+            <div class="d-flex-column">
 
-            <div class="card p-2">
-              <div class="d-flex justify-content-between align-items-center">
-                <!-- Todo: $Card title -->
-                <span class="text-truncate">{{ task.title }} </span>
-              </div>
-              <div class="d-flex align-items-center">
-                <div class="d-flex gap-1 align-items-center">
-                  <!-- Todo: Subtask %, d-none wenn kein subtask -->
-                  <small class="text-secondary mb-0">$25%</small>
-                  <!-- Todo: d-none wenn kein body -->
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                    class="bi bi-body-text text-secondary" viewBox="0 0 16 16">
-                    <path fill-rule="evenodd"
-                      d="M0 .5A.5.5 0 0 1 .5 0h4a.5.5 0 0 1 0 1h-4A.5.5 0 0 1 0 .5m0 2A.5.5 0 0 1 .5 2h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m9 0a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m-9 2A.5.5 0 0 1 .5 4h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5m5 0a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m7 0a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5m-12 2A.5.5 0 0 1 .5 6h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5m8 0a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m-8 2A.5.5 0 0 1 .5 8h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m7 0a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m-7 2a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 0 1h-8a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5" />
-                  </svg>
+              <!-- Start tasks -->
+
+              {% set list_tasks = tasks_by_list.get(list.id, []) %}
+              {% for task in list_tasks if task.parent_id == None %}
+              <div class="card p-2">
+                <div class="d-flex justify-content-between align-items-center">
+                  <!-- $Card title -->
+                  <span class="text-truncate">{{ task.title }} </span>
                 </div>
-                <div class="ms-auto">
-                  <!-- Todo: Wenn $onHold -->
-                  <span class="badge bg-primary text-white">On hold</span>
-                  <!-- Todo: entweder wenn $prio high -->
-                  <span class="badge bg-danger text-white">High</span>
-                  <!-- Todo: oder wenn $prio low, oder nichts-->
-                  <span class="badge bg-success text-white d-none">Low</span>
-                  <!-- Todo: Dreipunkt Button -->
-                  <button class="btn btn-outline-secondary btn-sm border-0">
+                <div class="d-flex align-items-center">
+                  <div class="d-flex gap-1 align-items-center">
+                    <!-- Todo: Subtask %, d-none wenn kein subtask -->
+                    <small class="text-secondary mb-0">$25%</small>
+                    <!-- d-none wenn kein body -->
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                      class="bi bi-three-dots" viewBox="0 0 16 16">
-                      <path
-                        d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3" />
+                      class="bi bi-body-text text-secondary {% if not task.body %}d-none{% endif %}"
+                      viewBox="0 0 16 16">
+                      <path fill-rule="evenodd"
+                        d="M0 .5A.5.5 0 0 1 .5 0h4a.5.5 0 0 1 0 1h-4A.5.5 0 0 1 0 .5m0 2A.5.5 0 0 1 .5 2h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m9 0a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m-9 2A.5.5 0 0 1 .5 4h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5m5 0a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m7 0a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5m-12 2A.5.5 0 0 1 .5 6h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5m8 0a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m-8 2A.5.5 0 0 1 .5 8h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m7 0a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m-7 2a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 0 1h-8a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5" />
+                    </svg>
+                  </div>
+                  <div class="ms-auto">
+                    <!-- Wenn $onHold -->
+                    <span class="badge bg-primary text-white{% if task.onhold == False %} d-none {% endif %}">On
+                      hold</span>
+                    <!-- entweder wenn $prio high -->
+                    <span
+                      class="badge bg-danger text-white {% if task.prio == 0 or task.prio == 2 %} d-none {% endif %}">High</span>
+                    <!-- oder wenn $prio low, oder nichts-->
+                    <span
+                      class="badge bg-success text-white {% if task.prio == 0 or task.prio == 1 %} d-none {% endif %}">Low</span>
+                    <!-- Dreipunkt Button -->
+                    <div class="dropdown d-inline-block">
+                      <button class="btn btn-outline-secondary btn-sm border-0 dropdown-toggle" type="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                          class="bi bi-three-dots" viewBox="0 0 16 16">
+                          <path
+                            d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3" />
+                        </svg>
+                      </button>
+                      <ul class="dropdown-menu dropdown-menu-end dropdown-menu-lg-start">
+                        <li><a class="dropdown-item task-action" data-task-id="{{ task.id }}" data-action="onhold"
+                            href="#">{% if task.onhold == True %}Undo: {% endif %}On Hold</a></li>
+                        <li><a class="dropdown-item task-action" data-task-id="{{ task.id }}" data-action="archive"
+                            href="#">Archive</a></li>
+                        <li>
+                          <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item task-action" data-task-id="{{ task.id }}" data-action="prio_high"
+                            href="#">Prio: High</a></li>
+                        <li><a class="dropdown-item task-action" data-task-id="{{ task.id }}" data-action="prio_normal"
+                            href="#">Prio: Normal</a></li>
+                        <li><a class="dropdown-item task-action" data-task-id="{{ task.id }}" data-action="prio_low"
+                            href="#">Prio: Low</a></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <!-- Todo: Subtask Progress, d-none wenn kein subtask -->
+                <div class="progress mt-1" style="height: 5px;">
+                  <div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0"
+                    aria-valuemax="100">
+                  </div>
+                </div>
+                <a href="#" class="stretched-link" data-bs-toggle="modal" data-bs-target="#updateCardModal"
+                  data-task-id="{{ task.id }}" data-task-title="{{ task.title }}" data-task-body="{{ task.body }}"></a>
+              </div>
+
+
+              <!-- Subtask -->
+              {% for subtask in task.subtasks %}
+              <div class="container p-0 d-flex align-items-center">
+                <div class="">
+                  <button class="btn  btn-sm border-0 disabled">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                      class="bi bi-arrow-return-right" viewBox="0 0 16 16">
+                      <path fill-rule="evenodd"
+                        d="M1.5 1.5A.5.5 0 0 0 1 2v4.8a2.5 2.5 0 0 0 2.5 2.5h9.793l-3.347 3.346a.5.5 0 0 0 .708.708l4.2-4.2a.5.5 0 0 0 0-.708l-4-4a.5.5 0 0 0-.708.708L13.293 8.3H3.5A1.5 1.5 0 0 1 2 6.8V2a.5.5 0 0 0-.5-.5" />
                     </svg>
                   </button>
-                </div>
-              </div>
-              <!-- Todo: Subtask Progress, d-none wenn kein subtask -->
-              <div class="progress mt-1" style="height: 5px;">
-                <div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0"
-                  aria-valuemax="100">
-                </div>
-              </div>
-            </div>
-            <!-- End task -->
-             {% endfor %}
-             
-            <!-- Start tasks -->
-            <div class="card p-2">
-              <div class="d-flex justify-content-between align-items-center">
-                <!-- Todo: $Card title -->
-                <span class="text-truncate">$Card </span>
-              </div>
-              <div class="d-flex align-items-center">
-                <div class="d-flex gap-1 align-items-center">
-                  <!-- Todo: Subtask %, d-none wenn kein subtask -->
-                  <small class="text-secondary mb-0">$25%</small>
-                  <!-- Todo: d-none wenn kein body -->
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                    class="bi bi-body-text text-secondary" viewBox="0 0 16 16">
-                    <path fill-rule="evenodd"
-                      d="M0 .5A.5.5 0 0 1 .5 0h4a.5.5 0 0 1 0 1h-4A.5.5 0 0 1 0 .5m0 2A.5.5 0 0 1 .5 2h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m9 0a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m-9 2A.5.5 0 0 1 .5 4h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5m5 0a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m7 0a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5m-12 2A.5.5 0 0 1 .5 6h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5m8 0a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m-8 2A.5.5 0 0 1 .5 8h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m7 0a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m-7 2a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 0 1h-8a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5" />
-                  </svg>
-                </div>
-                <div class="ms-auto">
-                  <!-- Todo: Wenn $onHold -->
-                  <span class="badge bg-primary text-white">On hold</span>
-                  <!-- Todo: entweder wenn $prio high -->
-                  <span class="badge bg-danger text-white d-none">High</span>
-                  <!-- Todo: oder wenn $prio low, oder nichts-->
-                  <span class="badge bg-success text-white d-none">Low</span>
-                  <!-- Todo: Dreipunkt Button -->
-                  <button class="btn btn-outline-secondary btn-sm border-0">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                      class="bi bi-three-dots" viewBox="0 0 16 16">
-                      <path
-                        d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3" />
-                    </svg>
-                  </button>
-                </div>
-              </div>
-              <!-- Todo: Subtask Progress, d-none wenn kein subtask -->
-              <div class="progress mt-1" style="height: 5px;">
-                <div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0"
-                  aria-valuemax="100">
-                </div>
-              </div>
-            </div>
-            <!-- End task -->
 
+                </div>
+                <div class="card p-2 w-100 ms-auto">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <!-- $Subtask title -->
+                    <span class="text-truncate">{{ subtask.title }} </span>
+                  </div>
+                  <div class="d-flex align-items-center">
+                    <div class="d-flex gap-1 align-items-center">
+
+                      <!-- d-none wenn kein body -->
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-body-text text-secondary {% if not subtask.body %}d-none{% endif %}"
+                        viewBox="0 0 16 16">
+                        <path fill-rule="evenodd"
+                          d="M0 .5A.5.5 0 0 1 .5 0h4a.5.5 0 0 1 0 1h-4A.5.5 0 0 1 0 .5m0 2A.5.5 0 0 1 .5 2h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m9 0a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m-9 2A.5.5 0 0 1 .5 4h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5m5 0a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m7 0a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5m-12 2A.5.5 0 0 1 .5 6h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5m8 0a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m-8 2A.5.5 0 0 1 .5 8h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m7 0a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m-7 2a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 0 1h-8a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5" />
+                      </svg>
+                    </div>
+                    <div class="ms-auto">
+                      <!-- Wenn $onHold -->
+                      <span class="badge bg-primary text-white{% if subtask.onhold == False %} d-none {% endif %}">On
+                        hold</span>
+                      <!-- entweder wenn $prio high -->
+                      <span
+                        class="badge bg-danger text-white {% if subtask.prio == 0 or subtask.prio == 2 %} d-none {% endif %}">High</span>
+                      <!-- oder wenn $prio low, oder nichts-->
+                      <span
+                        class="badge bg-success text-white {% if subtask.prio == 0 or subtask.prio == 1 %} d-none {% endif %}">Low</span>
+                      
+                      <!-- Dreipunkt Button -->
+                      <div class="dropdown d-inline-block">
+                        <button class="btn btn-outline-secondary btn-sm border-0 dropdown-toggle" type="button"
+                          data-bs-toggle="dropdown" aria-expanded="false">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-three-dots" viewBox="0 0 16 16">
+                            <path
+                              d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3" />
+                          </svg>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-lg-start">
+                          <li><a class="dropdown-item task-action" data-task-id="{{ subtask.id }}" data-action="onhold"
+                              href="#">{% if subtask.onhold == True %}Undo: {% endif %}On Hold</a></li>
+                          <li><a class="dropdown-item task-action" data-task-id="{{ subtask.id }}" data-action="archive"
+                              href="#">Archive</a></li>
+                          <li>
+                            <hr class="dropdown-divider">
+                          </li>
+                          <li><a class="dropdown-item task-action" data-task-id="{{ subtask.id }}"
+                              data-action="prio_high" href="#">Prio: High</a></li>
+                          <li><a class="dropdown-item task-action" data-task-id="{{ subtask.id }}"
+                              data-action="prio_normal" href="#">Prio: Normal</a></li>
+                          <li><a class="dropdown-item task-action" data-task-id="{{ subtask.id }}"
+                              data-action="prio_low" href="#">Prio: Low</a></li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                  <a href="#" class="stretched-link" data-bs-toggle="modal" data-bs-target="#updateCardModal"
+                    data-task-id="{{ subtask.id }}" data-task-title="{{ subtask.title }}"
+                    data-task-body="{{ subtask.body }}"></a>
+                </div>
+              </div>
+              <!-- End for Subtask -->
+              {% endfor %}
+              <!-- End for Task -->
+              {% endfor %}
+            </div>
           </div>
         </div>
       </div>
@@ -184,11 +252,71 @@
       <!-- End lane -->
     </div>
   </div>
+
+  <!-- addListModal -->
+  <div class="modal fade" id="addListModal" tabindex="-1" aria-labelledby="addListModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-body">
+          <form id="addListForm">
+            <div class="d-flex gap-3">
+              <input type="text" class="form-control flex-grow-1" id="listTitle" name="title" placeholder="Add List"
+                maxlength="100" required autofocus>
+              <input type="hidden" name="project_id" value="">
+              <button type="submit" class="btn btn-primary">Add</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
   </div>
+
+  <!-- addCardModal -->
+  <div class="modal fade" id="addCardModal" tabindex="-1" aria-labelledby="addCardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-body">
+          <form id="addCardForm">
+            <div class="d-flex gap-3">
+              <input type="text" class="form-control flex-grow-1" id="cardTitle" name="title"
+                placeholder="Add Card Title" maxlength="100" required autofocus>
+              <!-- hidden input will be updated via javascript -->
+              <input type="hidden" name="list_id" value="">
+              <button type="submit" class="btn btn-primary">Add</button>
+            </div>
+            <div class="mt-3 border" id="editor" name="body" style="height: 400px">
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- updateCardModal -->
+  <div class="modal fade" id="updateCardModal" tabindex="-1" aria-labelledby="updateCardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-body">
+          <form id="updateCardForm">
+            <div class="d-flex gap-3">
+              <input type="text" class="form-control flex-grow-1" id="updateCardTitle" name="title"
+                placeholder="Update Card Title" maxlength="100" value="" required>
+              <input type="hidden" name="task_id" value="">
+              <button type="submit" class="btn btn-primary">Update</button>
+            </div>
+            <div class="mt-3 border" id="updateEditor" name="body" value="" style="height: 400px">
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
     crossorigin="anonymous"></script>
   <!-- <script src='https://cdnjs.cloudflare.com/ajax/libs/dragula/3.7.3/dragula.min.js'></script> -->
+  <script src="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.js"></script>
   <script src="{{ url_for('static', filename='app.js') }}"></script>
 </body>
 
