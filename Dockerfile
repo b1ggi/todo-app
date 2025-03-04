@@ -26,11 +26,8 @@ COPY . .
 RUN adduser -u 5678 --disabled-password --gecos "" appuser && chown -R appuser /app
 USER appuser
 
-# Initialize the database
-RUN python /app/init_db.py
-
 # During debugging, this entry point will be overridden. For more information, please refer to https://aka.ms/vscode-docker-python-debug
-CMD ["gunicorn", "--bind", "0.0.0.0:5000", "app:app"]
+CMD ["gunicorn", "--bind", "0.0.0.0:5000", "run:app"]
 
 HEALTHCHECK --interval=30s --timeout=10s --retries=3 CMD wget --no-verbose --tries=1 --spider http://127.0.0.1:5000/ || exit 1
-LABEL org.opencontainers.image.source https://github.com/b1ggi/todo-app
+LABEL org.opencontainers.image.source=https://github.com/b1ggi/todo-app

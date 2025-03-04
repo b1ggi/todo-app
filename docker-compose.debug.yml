@@ -9,4 +9,4 @@ services:
       - 5000:5000
       - 5678:5678
     environment:
-      - FLASK_APP=app.py
+      - FLASK_APP=run.py
