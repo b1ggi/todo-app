@@ -1,79 +1,25 @@
-@font-face {
-    font-family: 'FiraSans';
-    src: url("fonts/FiraSans-Light.ttf") format('truetype');
-    font-weight: normal;
-    font-style: normal;
-}
+html, body {
+    background: #e9ecef;
+  }
 
-body {
-  font-family: 'FiraSans';
-  max-width: 600px;
-  margin: auto;
-  padding: 20px;
-}
-
-input[type="text"] {
-  font-size: 16px;
-  font-family: 'FiraSans';
-}
-
-button {
-  padding: 8px;
-  font-family: 'FiraSans';
-}
-
-ul {
-  list-style: none;
-  padding-left: 0;
-}
-
-li {
-  margin: 10px 0;
-  background-color: rgb(192, 192, 192);
-  padding: 10px;
-}
-
-span {
-  max-width: 100%;
-  display: inline-block;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-#hoverInput {
+.dropdown-toggle::after {
   display: none;
-  position: absolute;
-  top: 15px;
-  width: 350px;
-  z-index: 1000;
-  left: 50%;
-  transform: translateX(-50%);
-  padding: 10px;
-  border: none;
-  resize: none;
-  font-family: 'FiraSans';
 }
 
-#hoverButton {
-  display: none;
-  margin-top: 15px;
-  position: absolute;
-  bottom: 3px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 1000;
-  font-family: 'FiraSans';
+
+.card .stretched-link {
+  /* Lower the stacking order */
+  z-index: 1;
+  pointer-events: auto;
 }
 
-#hoverContainer {
-  display: none;
-  position: absolute;
-  top: 60px;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: #ffffff;
-  border: 1px solid #ccc;
-  z-index: 999;
-  width: 400px;
-  height: 270px;
+.card button {
+  /* Ensure interactive elements are above the stretched link */
+  position: relative;
+  z-index: 2;
+}
+
+.card .dropdown-menu {
+  /* Ensure dropdowns are above the stretched link */
+  z-index: 3;
 }

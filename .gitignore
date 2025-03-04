@@ -3,7 +3,7 @@ venv/
 .venv/
 
 #Caches und Logs
-__pycache__/
+**/__pycache__/
 *.pyc
 *.pyo
 *.log
