@@ -1,5 +1,5 @@
 services:
-  todoapp:
+  todo-app:
     image: todo-app
     build:
       context: .

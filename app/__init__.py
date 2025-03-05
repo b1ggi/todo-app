@@ -4,8 +4,6 @@ from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 
 from app.helpers import init_db
-import os
-
 
 
 def create_app():
