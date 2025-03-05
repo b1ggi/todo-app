@@ -2,7 +2,7 @@
 
 A simple to-do list web application built with **Flask** and **SQLAlchemy**.
 
-<img align="center" alt="Screenshot" src="https://github.com/user-attachments/assets/fcdd34e3-6fc1-4b54-ad88-80d3e0eed758">
+<img align="center" alt="Screenshot" src="https://github.com/user-attachments/assets/8093ced3-4625-42a7-a930-7967c113737e">
 
 ## 🛠️ Requirements
 
