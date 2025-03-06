@@ -10,13 +10,18 @@ task_bp = Blueprint('task_bp', __name__)
 def add_task() -> Response:
     title = request.form.get('title')
     list_id = request.form.get('list_id')
+    task_id = request.form.get('task_id')
+    print(task_id)
     body = request.form.get('body')
     if title and list_id:
         new_task = Task(
             title=title,
             list_id=list_id,
             body=body
-            )
+        )
+        #Wenn task_id vorhanden, dann wird die Aufgabe als Unteraufgabe hinzugefügt
+        if task_id:
+            new_task.parent_id = task_id
         db.session.add(new_task)
         db.session.commit()
         return jsonify({"message": "Task added!"}), 200

@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 
-//fill addcardmodal hidden list_id with actual list_id
+//fill addcardmodal hidden list_id with actual list_id (and task_id if exists)
 document.addEventListener('DOMContentLoaded', function() {
   // When the addCardModal is about to be shown, update its hidden input
   const addCardModalEl = document.getElementById('addCardModal');
@@ -32,8 +32,14 @@ document.addEventListener('DOMContentLoaded', function() {
     const button = event.relatedTarget;
     // Extract info from data-list-id attribute
     const listId = button.getAttribute('data-list-id');
-    // Update the modal's hidden input value
+    // Update the modal's hidden list-id input value
     addCardModalEl.querySelector('input[name="list_id"]').value = listId;
+    // Update the modal's hidden task-id input value
+    const taskId = button.getAttribute('data-task-id');
+    if (taskId) {
+      addCardModalEl.querySelector('input[name="task_id"]').value = taskId;
+      console.log("Modal opened for task id:", taskId);
+    }
     console.log("Modal opened for list id:", listId);
   });
 });
@@ -229,7 +235,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 });
-
 
 
 // Update Card Options

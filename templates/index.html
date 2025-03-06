@@ -144,10 +144,12 @@
                         </svg>
                       </button>
                       <ul class="dropdown-menu dropdown-menu-end dropdown-menu-lg-start">
+                        <li><a class="dropdown-item task-action" data-task-id="{{ task.id }}" data-action="add_subtask"
+                            href="#" data-bs-toggle="modal" data-bs-target="#addCardModal" data-list-id="{{ list.id }}">Add Subtask</a></li>
+                        <li><a class="dropdown-item task-action" data-task-id="{{ task.id }}" data-action="archive"
+                          href="#">Archive</a></li>
                         <li><a class="dropdown-item task-action" data-task-id="{{ task.id }}" data-action="onhold"
                             href="#">{% if task.onhold == True %}Undo: {% endif %}On Hold</a></li>
-                        <li><a class="dropdown-item task-action" data-task-id="{{ task.id }}" data-action="archive"
-                            href="#">Archive</a></li>
                         <li>
                           <hr class="dropdown-divider">
                         </li>
@@ -225,10 +227,10 @@
                           </svg>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end dropdown-menu-lg-start">
+                          <li><a class="dropdown-item task-action" data-task-id="{{ subtask.id }}" data-action="archive"
+                            href="#">Archive</a></li>
                           <li><a class="dropdown-item task-action" data-task-id="{{ subtask.id }}" data-action="onhold"
                               href="#">{% if subtask.onhold == True %}Undo: {% endif %}On Hold</a></li>
-                          <li><a class="dropdown-item task-action" data-task-id="{{ subtask.id }}" data-action="archive"
-                              href="#">Archive</a></li>
                           <li>
                             <hr class="dropdown-divider">
                           </li>
@@ -289,6 +291,7 @@
                 placeholder="Add Card Title" maxlength="100" required autofocus>
               <!-- hidden input will be updated via javascript -->
               <input type="hidden" name="list_id" value="">
+              <input type="hidden" name="task_id" value="">
               <button type="submit" class="btn btn-primary">Add</button>
             </div>
             <div class="mt-3 border" id="editor" name="body" style="height: 400px">
