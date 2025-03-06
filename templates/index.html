@@ -175,7 +175,7 @@
 
 
               <!-- Start Subtask -->
-              {% for subtask in task.subtasks if task.archived == None %}
+              {% for subtask in task.subtasks if subtask.archived == False %}
               <div class="container p-0 d-flex align-items-center">
                 <div class="">
                   <button class="btn  btn-sm border-0 disabled">
