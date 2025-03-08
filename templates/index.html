@@ -48,7 +48,7 @@
 
     <div class="row">
 
-      <!-- Start lane -->
+      <!-- Start list lane -->
       <!-- For Schleife zum durchlaufen der Listen -->
       {% for list in lists %}
       <div class="col-12 col-lg-4">
@@ -101,17 +101,18 @@
 
               {% set list_cards = cards_by_list.get(list.id, []) %}
               {% for card in list_cards if card.parent_id == None %}
-              <div class="card p-2">
+              <div class="card p-2 {% if card.done == True %}bg-dark-subtle{% endif %}">
                 <div class="d-flex justify-content-between align-items-center">
                   <!-- $Card title -->
-                  <span class="text-truncate">{{ card.title }} </span>
+                  <span class="text-truncate {% if card.done == True %}text-decoration-line-through{% endif %}">{{ card.title }} </span>
                 </div>
                 <div class="d-flex align-items-center">
                   <div class="d-flex gap-1 align-items-center">
                     <!-- Subcard %, invisible wenn kein subcard -->
-                    {% if card.subcards %}
-                    {% set total = card.subcards|length %}
-                    {% set completed = card.subcards|selectattr("archived", "equalto", True)|list|length %}
+                    {% set active_subcards = card.subcards | selectattr("archived", "equalto", False) | list %}
+                    {% if active_subcards %}
+                    {% set total = active_subcards|length %}
+                    {% set completed = active_subcards|selectattr("done", "equalto", True)|list|length %}
                     {% set percent = (completed / total * 100)|round|int %}
                     <small class="text-secondary mb-0">{{ percent }}%</small>
                     {% endif %}
@@ -147,7 +148,9 @@
                         <li><a class="dropdown-item card-action" data-card-id="{{ card.id }}" data-action="add_subcard"
                             href="#" data-bs-toggle="modal" data-bs-target="#addCardModal" data-list-id="{{ list.id }}">Add Subcard</a></li>
                         <li><a class="dropdown-item card-action" data-card-id="{{ card.id }}" data-action="archive"
-                          href="#">Archive</a></li>
+                          href="#">{% if card.archived == True %}Undo: {% endif %}Archive</a></li>
+                        <li><a class="dropdown-item card-action" data-card-id="{{ card.id }}" data-action="done"
+                            href="#">{% if card.done == True %}Undo: {% endif %}Done</a></li>
                         <li><a class="dropdown-item card-action" data-card-id="{{ card.id }}" data-action="onhold"
                             href="#">{% if card.onhold == True %}Undo: {% endif %}On Hold</a></li>
                         <li>
@@ -164,7 +167,7 @@
                   </div>
                 </div>
                 <!-- Subcard Progress, invisible wenn kein subcard -->
-                {% if card.subcards %}
+                {% if active_subcards %}
                 <div class="progress mt-1" style="height: 5px;">
                   <div class="progress-bar" role="progressbar" style="width: {{ percent }}%;" aria-valuenow="25"
                     aria-valuemin="0" aria-valuemax="100">
@@ -189,10 +192,10 @@
                   </button>
 
                 </div>
-                <div class="card p-2 w-100 ms-auto">
+                <div class="card p-2 w-100 ms-auto {% if subcard.done == True %}bg-dark-subtle{% endif %}">
                   <div class="d-flex justify-content-between align-items-center">
                     <!-- $Subcard title -->
-                    <span class="text-truncate">{{ subcard.title }} </span>
+                    <span class="text-truncate{% if subcard.done == True %} text-decoration-line-through text-body-secondary{% endif %}">{{ subcard.title }} </span>
                   </div>
                   <div class="d-flex align-items-center">
                     <div class="d-flex gap-1 align-items-center">
@@ -229,6 +232,8 @@
                         <ul class="dropdown-menu dropdown-menu-end dropdown-menu-lg-start">
                           <li><a class="dropdown-item card-action" data-card-id="{{ subcard.id }}" data-action="archive"
                             href="#">Archive</a></li>
+                          <li><a class="dropdown-item card-action" data-card-id="{{ subcard.id }}" data-action="done"
+                              href="#">{% if subcard.done == True %}Undo: {% endif %}Done</a></li>
                           <li><a class="dropdown-item card-action" data-card-id="{{ subcard.id }}" data-action="onhold"
                               href="#">{% if subcard.onhold == True %}Undo: {% endif %}On Hold</a></li>
                           <li>

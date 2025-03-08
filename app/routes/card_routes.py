@@ -5,13 +5,12 @@ from app.helpers import get_or_404
 
 card_bp = Blueprint('card_bp', __name__)
 
-#Aufgabe hinzufügen
+#Karte hinzufügen
 @card_bp.route('/', methods=['POST'])
 def add_card() -> Response:
     title = request.form.get('title')
     list_id = request.form.get('list_id')
     card_id = request.form.get('card_id')
-    print(card_id)
     body = request.form.get('body')
     if title and list_id:
         new_card = Card(
@@ -19,7 +18,7 @@ def add_card() -> Response:
             list_id=list_id,
             body=body
         )
-        #Wenn card_id vorhanden, dann wird die Aufgabe als Unteraufgabe hinzugefügt
+        #Wenn card_id vorhanden, dann wird die Karte als Unterkarte hinzugefügt
         if card_id:
             new_card.parent_id = card_id
         db.session.add(new_card)
@@ -39,11 +38,11 @@ def update_card(card_id) -> Response:
     if action == "archive":
         card.archived = not card.archived
         db.session.commit()
-        return jsonify({"message": "card toggle archived!"}), 200
+        return jsonify({"message": "Card toggle archived!"}), 200
     elif action == "onhold":
         card.onhold = not card.onhold
         db.session.commit()
-        return jsonify({"message": "card toggle on hold!"}), 200
+        return jsonify({"message": "Card toggle on hold!"}), 200
     elif action == "prio_high":
         card.prio = 1
         db.session.commit()
@@ -56,6 +55,10 @@ def update_card(card_id) -> Response:
         card.prio = 2
         db.session.commit()
         return jsonify({"message": "Low Priority set!"}), 200
+    elif action == "done":
+        card.done = not card.done
+        db.session.commit()
+        return jsonify({"message": "Card toggle done!"}), 200
     elif action == None:
         new_title = request.form.get('title')
         new_body = request.form.get('body')
