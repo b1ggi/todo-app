@@ -1,70 +1,70 @@
 from flask import Blueprint, request, jsonify, Response
 from app import db
-from app.models import Task
+from app.models import Card
 from app.helpers import get_or_404
 
-task_bp = Blueprint('task_bp', __name__)
+card_bp = Blueprint('card_bp', __name__)
 
 #Aufgabe hinzufügen
-@task_bp.route('/', methods=['POST'])
-def add_task() -> Response:
+@card_bp.route('/', methods=['POST'])
+def add_card() -> Response:
     title = request.form.get('title')
     list_id = request.form.get('list_id')
-    task_id = request.form.get('task_id')
-    print(task_id)
+    card_id = request.form.get('card_id')
+    print(card_id)
     body = request.form.get('body')
     if title and list_id:
-        new_task = Task(
+        new_card = Card(
             title=title,
             list_id=list_id,
             body=body
         )
-        #Wenn task_id vorhanden, dann wird die Aufgabe als Unteraufgabe hinzugefügt
-        if task_id:
-            new_task.parent_id = task_id
-        db.session.add(new_task)
+        #Wenn card_id vorhanden, dann wird die Aufgabe als Unteraufgabe hinzugefügt
+        if card_id:
+            new_card.parent_id = card_id
+        db.session.add(new_card)
         db.session.commit()
-        return jsonify({"message": "Task added!"}), 200
+        return jsonify({"message": "Card added!"}), 200
     else:
         return jsonify({"message": "Title and list_id are required!"}), 400
 
 
 #Aufgabe ändern
-@task_bp.route('/<int:task_id>', methods=['PUT'])
-def update_task(task_id) -> Response:
-    task = get_or_404(Task, task_id)
+@card_bp.route('/<int:card_id>', methods=['PUT'])
+def update_card(card_id) -> Response:
+    card = get_or_404(Card, card_id)
 
     action = request.form.get('action')
     
     if action == "archive":
-        task.archived = not task.archived
+        card.archived = not card.archived
         db.session.commit()
-        return jsonify({"message": "Task toggle archived!"}), 200
+        return jsonify({"message": "card toggle archived!"}), 200
     elif action == "onhold":
-        task.onhold = not task.onhold
+        card.onhold = not card.onhold
         db.session.commit()
-        return jsonify({"message": "Task toggle on hold!"}), 200
+        return jsonify({"message": "card toggle on hold!"}), 200
     elif action == "prio_high":
-        task.prio = 1
+        card.prio = 1
         db.session.commit()
         return jsonify({"message": "High Priority set!"}), 200
     elif action == "prio_normal":
-        task.prio = 0
+        card.prio = 0
         db.session.commit()
         return jsonify({"message": "Normal Priority set!"}), 200
     elif action == "prio_low":
-        task.prio = 2
+        card.prio = 2
         db.session.commit()
         return jsonify({"message": "Low Priority set!"}), 200
     elif action == None:
         new_title = request.form.get('title')
         new_body = request.form.get('body')
         if new_title or new_body:
-            task.title = new_title
+            card.title = new_title
             if new_body == '':
-                task.body = None
+                card.body = None
             else:
-                task.body = new_body
+                card.body = new_body
             db.session.commit()
             return jsonify({"message": "Title and Body updated!"}), 200
         else:

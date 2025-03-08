@@ -17,7 +17,7 @@ class List(db.Model):
     position = db.Column(db.Integer, nullable=False, default=0)
     collapsed = db.Column(db.Boolean, default=False)
     project_id = db.Column(db.Integer, db.ForeignKey('project.id'), nullable=False)
-    tasks = db.relationship('Task', backref='list', lazy=True)
+    cards = db.relationship('Card', backref='list', lazy=True)
 
     @classmethod
     def get_next_position(cls, project_id):
@@ -37,8 +37,8 @@ class List(db.Model):
         else:
             return len(project_lists)
 
-class Task(db.Model):
-    __tablename__ = 'task'
+class Card(db.Model):
+    __tablename__ = 'card'
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
     body = db.Column(db.Text, nullable=True)
@@ -47,7 +47,7 @@ class Task(db.Model):
     # 0 = normal, 1 = high, 2 = low
     prio = db.Column(db.Integer, default=0)
     list_id = db.Column(db.Integer, db.ForeignKey('list.id'), nullable=False)
-    # parent task
-    parent_id = db.Column(db.Integer, db.ForeignKey('task.id'))
-    parent   = db.relationship('Task', back_populates='subtasks', remote_side=[id])
-    subtasks = db.relationship('Task', back_populates='parent', lazy='select')
+    # parent card
+    parent_id = db.Column(db.Integer, db.ForeignKey('card.id'))
+    parent   = db.relationship('Card', back_populates='subcards', remote_side=[id])
+    subcards = db.relationship('Card', back_populates='parent', lazy='select')

@@ -1,7 +1,7 @@
 from __future__ import annotations
 from flask import abort, current_app
 from app import db
-from app.models import Project, List, Task
+from app.models import Project, List, Card
 
 
 
@@ -24,8 +24,8 @@ def init_db() -> str:
     1. Creates all database tables.
     2. Checks if the default project exists; if not, creates it.
     3. Checks if the default list exists within the default project; if not, creates it.
-    4. For development purposes, adds a default task and a subtask to the default list.
-    Note: The development tasks added are temporary and should be removed later.
+    4. For development purposes, adds a default card and a subcard to the default list.
+    Note: The development cards added are temporary and should be removed later.
     Returns:
         str: Success message if everything is ok.
     """
@@ -48,12 +48,12 @@ def init_db() -> str:
             db.session.add(default_list)
             db.session.flush()
 
-            # For development: add a task, TODO: remove later
-            dev_card = Task(title="Entwickler-Task", body="Erstelle die App mit Flask und SQLAlchemy", list_id=default_list.id)
+            # For development: add a card, TODO: remove later
+            dev_card = Card(title="Entwickler-Card", body="Erstelle die App mit Flask und SQLAlchemy", list_id=default_list.id)
             db.session.add(dev_card)
             db.session.flush()
-            # For development: add a subtask, TODO: remove later
-            dev_subcard = Task(title="Entwickler-Subtask", list_id=default_list.id, parent_id=dev_card.id)
+            # For development: add a subcard, TODO: remove later
+            dev_subcard = Card(title="Entwickler-Subcard", list_id=default_list.id, parent_id=dev_card.id)
             db.session.add(dev_subcard)     
             db.session.commit()
     

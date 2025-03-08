@@ -17,9 +17,9 @@ def create_app():
     # Blueprints importieren und registrieren
     from app.routes.main_routes import main_bp
     from app.routes.list_routes import list_bp
-    from app.routes.task_routes import task_bp
+    from app.routes.card_routes import card_bp
     app.register_blueprint(main_bp)
     app.register_blueprint(list_bp, url_prefix='/list')
-    app.register_blueprint(task_bp, url_prefix='/card')
+    app.register_blueprint(card_bp, url_prefix='/card')
 
     return app
