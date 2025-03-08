@@ -36,7 +36,7 @@ def update_list(list_id) -> Response:
     #Liste-Objekt
     list = get_or_404(List, list_id)
 
-    #cards der Liste
+    #Cards der Liste
     cards = Card.query.filter_by(list_id=list_id).all()
 
     # Request-Parameter

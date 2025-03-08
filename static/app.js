@@ -3,6 +3,11 @@ document.getElementById('addListModal').addEventListener('shown.bs.modal', funct
   document.getElementById('listTitle').focus();
 });
 
+// focus updatelistmodal input field
+document.getElementById('updateListModal').addEventListener('shown.bs.modal', function () {
+  document.getElementById('updateListTitle').focus();
+});
+
 // focus addcardmodal input field
 document.getElementById('addCardModal').addEventListener('shown.bs.modal', function () {
   document.getElementById('cardTitle').focus();
@@ -58,6 +63,21 @@ document.addEventListener('DOMContentLoaded', function() {
     // Update the modal's title input value
     updateCardModalEl.querySelector('input[name="title"]').value = button.getAttribute('data-card-title');
     console.log("Modal opened for card id:", cardId);
+  });
+});
+
+//fill updatelistmodal hidden list_id with actual list_id
+document.addEventListener('DOMContentLoaded', function() {
+  // When the updateListModal is about to be shown, update its hidden input
+  const updateListModalEl = document.getElementById('updateListModal');
+  updateListModalEl.addEventListener('show.bs.modal', function(event) {
+    // Button that triggered the modal
+    const button = event.relatedTarget;
+    // Extract info from data-list-id attribute
+    const listId = button.getAttribute('data-list-id');
+    // Update the modal's hidden input value
+    updateListModalEl.querySelector('input[name="list_id"]').value = listId;
+    console.log("Modal opened for list id:", listId);
   });
 });
 
@@ -326,7 +346,46 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 
+// Update List Title
+document.addEventListener('DOMContentLoaded', function() {
+  const updateListForm = document.getElementById('updateListForm');
 
+  updateListForm.addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent default form submission
+    const listId = updateListForm.querySelector('input[name="list_id"]').value;
+    // Gather form data
+    const formData = new FormData(updateListForm);
+
+    // Send form data to your API endpoint for updating a list
+    fetch(`/list/${listId}`, {
+      method: 'POST',
+      body: formData
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error("Network response was not OK");
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log("List updated successfully:", data);
+      // Hide the modal after a successful submission
+      const modalEl = document.getElementById('updateListModal');
+      const modalInstance = bootstrap.Modal.getInstance(modalEl);
+      if (modalInstance) {
+        modalInstance.hide();
+      } else {
+        // If no instance exists, create one and then hide it
+        new bootstrap.Modal(modalEl).hide();
+      }
+      location.reload(); // Reload the page to update the card list
+    })
+    .catch(error => {
+      console.error("Error submitting list form:", error);
+      // Optionally, display an error message to the user
+    });
+  });
+});
 
 
 // Quill Text Editor
