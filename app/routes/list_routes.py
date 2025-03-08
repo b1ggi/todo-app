@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify, Response
 from app import db
-from app.models import List, Project, Task
+from app.models import List, Project, Card
 from app.helpers import get_or_404
 
 list_bp = Blueprint('list_bp', __name__)
@@ -36,8 +36,8 @@ def update_list(list_id) -> Response:
     #Liste-Objekt
     list = get_or_404(List, list_id)
 
-    #Tasks der Liste
-    tasks = Task.query.filter_by(list_id=list_id).all()
+    #Cards der Liste
+    cards = Card.query.filter_by(list_id=list_id).all()
 
     # Request-Parameter
     new_archived = request.form.get('archived')
@@ -52,9 +52,9 @@ def update_list(list_id) -> Response:
 
         #Position der Liste auf -1 setzen
         list.position = -1
-        # Tasks mit archivieren
-        for task in tasks:
-            task.archived=True
+        # cards mit archivieren
+        for card in cards:
+            card.archived=True
         
         #Projekt archivieren wenn alle Listen archiviert sind
         if List.get_next_position(list.project_id) == 0:
@@ -64,7 +64,7 @@ def update_list(list_id) -> Response:
             List.order_active(list.project_id)
 
         db.session.commit()
-        return jsonify({"message": "List and Tasks archived!"}), 200
+        return jsonify({"message": "List and cards archived!"}), 200
     elif new_archived == "False":
 
         #Liste wiederherstellen
@@ -76,12 +76,12 @@ def update_list(list_id) -> Response:
         #Projekt wiederherstellen
         db.session.get(Project, list.project_id).archived=False
 
-        #Tasks wiederherstellen
-        for task in tasks:
-            task.archived=False
+        #cards wiederherstellen
+        for card in cards:
+            card.archived=False
                 
         db.session.commit()
-        return jsonify({"message": "List and Tasks restored!"}), 200
+        return jsonify({"message": "List and cards restored!"}), 200
     
     elif new_title:
         #Titel ändern

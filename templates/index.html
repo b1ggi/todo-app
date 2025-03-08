@@ -9,10 +9,12 @@
     integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
   <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}" type="image/x-icon">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.bubble.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.bubble.css" />
 </head>
 
 <body>
+
+  <!-- Todo: Tooltips für Alarme mit Toast? -->
   <div class="container">
 
     <nav class="navbar bg-body-tertiary p-0 sticky-top">
@@ -48,15 +50,16 @@
 
     <div class="row">
 
-      <!-- Start lane -->
+      <!-- Start list lane -->
       <!-- For Schleife zum durchlaufen der Listen -->
       {% for list in lists %}
       <div class="col-12 col-lg-4">
         <div class="card mb-2">
           <div class="card-header bg-light d-flex justify-content-between align-items-center py-1 px-2">
             <h3 class="card-title h6 mb-0 text-truncate">
-              <!-- Todo: $Listentitel änderbar -->
-              {{ list.title }}
+              <!-- $Listentitel änderbar -->
+              <a href="#" class="text-reset text-decoration-none" data-bs-toggle="modal" data-bs-target="#updateListModal"
+              data-list-id="{{ list.id }}" data-list-title="{{ list.title }}">{{ list.title }}</a>
             </h3>
             <div class="btn-group">
               <!-- Collapse  -->
@@ -97,22 +100,28 @@
             <!-- Todo: change $id -->
             <div class="d-flex-column">
 
-              <!-- Start tasks -->
+              <!-- Start cards -->
 
-              {% set list_tasks = tasks_by_list.get(list.id, []) %}
-              {% for task in list_tasks if task.parent_id == None %}
-              <div class="card p-2">
+              {% set list_cards = cards_by_list.get(list.id, []) %}
+              {% for card in list_cards if card.parent_id == None %}
+              <div class="card p-2 {% if card.done == True %}bg-dark-subtle{% endif %}">
                 <div class="d-flex justify-content-between align-items-center">
                   <!-- $Card title -->
-                  <span class="text-truncate">{{ task.title }} </span>
+                  <span class="text-truncate {% if card.done == True %}text-decoration-line-through{% endif %}">{{ card.title }} </span>
                 </div>
                 <div class="d-flex align-items-center">
                   <div class="d-flex gap-1 align-items-center">
-                    <!-- Todo: Subtask %, d-none wenn kein subtask -->
-                    <small class="text-secondary mb-0">$25%</small>
+                    <!-- Subcard %, invisible wenn kein subcard -->
+                    {% set active_subcards = card.subcards | selectattr("archived", "equalto", False) | list %}
+                    {% if active_subcards %}
+                    {% set total = active_subcards|length %}
+                    {% set completed = active_subcards|selectattr("done", "equalto", True)|list|length %}
+                    {% set percent = (completed / total * 100)|round|int %}
+                    <small class="text-secondary mb-0">{{ percent }}%</small>
+                    {% endif %}
                     <!-- d-none wenn kein body -->
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                      class="bi bi-body-text text-secondary {% if not task.body %}d-none{% endif %}"
+                      class="bi bi-body-text text-secondary {% if not card.body %}d-none{% endif %}"
                       viewBox="0 0 16 16">
                       <path fill-rule="evenodd"
                         d="M0 .5A.5.5 0 0 1 .5 0h4a.5.5 0 0 1 0 1h-4A.5.5 0 0 1 0 .5m0 2A.5.5 0 0 1 .5 2h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m9 0a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m-9 2A.5.5 0 0 1 .5 4h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5m5 0a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m7 0a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5m-12 2A.5.5 0 0 1 .5 6h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5m8 0a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m-8 2A.5.5 0 0 1 .5 8h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m7 0a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m-7 2a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 0 1h-8a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5" />
@@ -120,14 +129,14 @@
                   </div>
                   <div class="ms-auto">
                     <!-- Wenn $onHold -->
-                    <span class="badge bg-primary text-white{% if task.onhold == False %} d-none {% endif %}">On
+                    <span class="badge bg-primary text-white{% if card.onhold == False %} d-none {% endif %}">On
                       hold</span>
                     <!-- entweder wenn $prio high -->
                     <span
-                      class="badge bg-danger text-white {% if task.prio == 0 or task.prio == 2 %} d-none {% endif %}">High</span>
+                      class="badge bg-danger text-white {% if card.prio == 0 or card.prio == 2 %} d-none {% endif %}">High</span>
                     <!-- oder wenn $prio low, oder nichts-->
                     <span
-                      class="badge bg-success text-white {% if task.prio == 0 or task.prio == 1 %} d-none {% endif %}">Low</span>
+                      class="badge bg-success text-white {% if card.prio == 0 or card.prio == 1 %} d-none {% endif %}">Low</span>
                     <!-- Dreipunkt Button -->
                     <div class="dropdown d-inline-block">
                       <button class="btn btn-outline-secondary btn-sm border-0 dropdown-toggle" type="button"
@@ -139,36 +148,42 @@
                         </svg>
                       </button>
                       <ul class="dropdown-menu dropdown-menu-end dropdown-menu-lg-start">
-                        <li><a class="dropdown-item task-action" data-task-id="{{ task.id }}" data-action="onhold"
-                            href="#">{% if task.onhold == True %}Undo: {% endif %}On Hold</a></li>
-                        <li><a class="dropdown-item task-action" data-task-id="{{ task.id }}" data-action="archive"
-                            href="#">Archive</a></li>
+                        <li><a class="dropdown-item card-action" data-card-id="{{ card.id }}" data-action="add_subcard"
+                            href="#" data-bs-toggle="modal" data-bs-target="#addCardModal" data-list-id="{{ list.id }}">Add Subcard</a></li>
+                        <li><a class="dropdown-item card-action" data-card-id="{{ card.id }}" data-action="archive"
+                          href="#">{% if card.archived == True %}Undo: {% endif %}Archive</a></li>
+                        <li><a class="dropdown-item card-action" data-card-id="{{ card.id }}" data-action="done"
+                            href="#">{% if card.done == True %}Undo: {% endif %}Done</a></li>
+                        <li><a class="dropdown-item card-action" data-card-id="{{ card.id }}" data-action="onhold"
+                            href="#">{% if card.onhold == True %}Undo: {% endif %}On Hold</a></li>
                         <li>
                           <hr class="dropdown-divider">
                         </li>
-                        <li><a class="dropdown-item task-action" data-task-id="{{ task.id }}" data-action="prio_high"
+                        <li><a class="dropdown-item card-action" data-card-id="{{ card.id }}" data-action="prio_high"
                             href="#">Prio: High</a></li>
-                        <li><a class="dropdown-item task-action" data-task-id="{{ task.id }}" data-action="prio_normal"
+                        <li><a class="dropdown-item card-action" data-card-id="{{ card.id }}" data-action="prio_normal"
                             href="#">Prio: Normal</a></li>
-                        <li><a class="dropdown-item task-action" data-task-id="{{ task.id }}" data-action="prio_low"
+                        <li><a class="dropdown-item card-action" data-card-id="{{ card.id }}" data-action="prio_low"
                             href="#">Prio: Low</a></li>
                       </ul>
                     </div>
                   </div>
                 </div>
-                <!-- Todo: Subtask Progress, d-none wenn kein subtask -->
+                <!-- Subcard Progress, invisible wenn kein subcard -->
+                {% if active_subcards %}
                 <div class="progress mt-1" style="height: 5px;">
-                  <div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0"
-                    aria-valuemax="100">
+                  <div class="progress-bar progress-bar-striped" role="progressbar" style="width: {{ percent }}%;" aria-valuenow="25"
+                    aria-valuemin="0" aria-valuemax="100">
                   </div>
                 </div>
+                {% endif %}
                 <a href="#" class="stretched-link" data-bs-toggle="modal" data-bs-target="#updateCardModal"
-                  data-task-id="{{ task.id }}" data-task-title="{{ task.title }}" data-task-body="{{ task.body }}"></a>
+                  data-card-id="{{ card.id }}" data-card-title="{{ card.title }}" data-card-body="{{ card.body }}"></a>
               </div>
 
 
-              <!-- Subtask -->
-              {% for subtask in task.subtasks %}
+              <!-- Start Subcard -->
+              {% for subcard in card.subcards if subcard.archived == False %}
               <div class="container p-0 d-flex align-items-center">
                 <div class="">
                   <button class="btn  btn-sm border-0 disabled">
@@ -180,17 +195,17 @@
                   </button>
 
                 </div>
-                <div class="card p-2 w-100 ms-auto">
+                <div class="card p-2 w-100 ms-auto {% if subcard.done == True %}bg-dark-subtle{% endif %}">
                   <div class="d-flex justify-content-between align-items-center">
-                    <!-- $Subtask title -->
-                    <span class="text-truncate">{{ subtask.title }} </span>
+                    <!-- $Subcard title -->
+                    <span class="text-truncate{% if subcard.done == True %} text-decoration-line-through text-body-secondary{% endif %}">{{ subcard.title }} </span>
                   </div>
                   <div class="d-flex align-items-center">
                     <div class="d-flex gap-1 align-items-center">
 
                       <!-- d-none wenn kein body -->
                       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                        class="bi bi-body-text text-secondary {% if not subtask.body %}d-none{% endif %}"
+                        class="bi bi-body-text text-secondary {% if not subcard.body %}d-none{% endif %}"
                         viewBox="0 0 16 16">
                         <path fill-rule="evenodd"
                           d="M0 .5A.5.5 0 0 1 .5 0h4a.5.5 0 0 1 0 1h-4A.5.5 0 0 1 0 .5m0 2A.5.5 0 0 1 .5 2h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m9 0a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m-9 2A.5.5 0 0 1 .5 4h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5m5 0a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m7 0a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5m-12 2A.5.5 0 0 1 .5 6h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5m8 0a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m-8 2A.5.5 0 0 1 .5 8h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m7 0a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m-7 2a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 0 1h-8a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5" />
@@ -198,15 +213,15 @@
                     </div>
                     <div class="ms-auto">
                       <!-- Wenn $onHold -->
-                      <span class="badge bg-primary text-white{% if subtask.onhold == False %} d-none {% endif %}">On
+                      <span class="badge bg-primary text-white{% if subcard.onhold == False %} d-none {% endif %}">On
                         hold</span>
                       <!-- entweder wenn $prio high -->
                       <span
-                        class="badge bg-danger text-white {% if subtask.prio == 0 or subtask.prio == 2 %} d-none {% endif %}">High</span>
+                        class="badge bg-danger text-white {% if subcard.prio == 0 or subcard.prio == 2 %} d-none {% endif %}">High</span>
                       <!-- oder wenn $prio low, oder nichts-->
                       <span
-                        class="badge bg-success text-white {% if subtask.prio == 0 or subtask.prio == 1 %} d-none {% endif %}">Low</span>
-                      
+                        class="badge bg-success text-white {% if subcard.prio == 0 or subcard.prio == 1 %} d-none {% endif %}">Low</span>
+
                       <!-- Dreipunkt Button -->
                       <div class="dropdown d-inline-block">
                         <button class="btn btn-outline-secondary btn-sm border-0 dropdown-toggle" type="button"
@@ -218,31 +233,33 @@
                           </svg>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end dropdown-menu-lg-start">
-                          <li><a class="dropdown-item task-action" data-task-id="{{ subtask.id }}" data-action="onhold"
-                              href="#">{% if subtask.onhold == True %}Undo: {% endif %}On Hold</a></li>
-                          <li><a class="dropdown-item task-action" data-task-id="{{ subtask.id }}" data-action="archive"
-                              href="#">Archive</a></li>
+                          <li><a class="dropdown-item card-action" data-card-id="{{ subcard.id }}" data-action="archive"
+                            href="#">Archive</a></li>
+                          <li><a class="dropdown-item card-action" data-card-id="{{ subcard.id }}" data-action="done"
+                              href="#">{% if subcard.done == True %}Undo: {% endif %}Done</a></li>
+                          <li><a class="dropdown-item card-action" data-card-id="{{ subcard.id }}" data-action="onhold"
+                              href="#">{% if subcard.onhold == True %}Undo: {% endif %}On Hold</a></li>
                           <li>
                             <hr class="dropdown-divider">
                           </li>
-                          <li><a class="dropdown-item task-action" data-task-id="{{ subtask.id }}"
+                          <li><a class="dropdown-item card-action" data-card-id="{{ subcard.id }}"
                               data-action="prio_high" href="#">Prio: High</a></li>
-                          <li><a class="dropdown-item task-action" data-task-id="{{ subtask.id }}"
+                          <li><a class="dropdown-item card-action" data-card-id="{{ subcard.id }}"
                               data-action="prio_normal" href="#">Prio: Normal</a></li>
-                          <li><a class="dropdown-item task-action" data-task-id="{{ subtask.id }}"
+                          <li><a class="dropdown-item card-action" data-card-id="{{ subcard.id }}"
                               data-action="prio_low" href="#">Prio: Low</a></li>
                         </ul>
                       </div>
                     </div>
                   </div>
                   <a href="#" class="stretched-link" data-bs-toggle="modal" data-bs-target="#updateCardModal"
-                    data-task-id="{{ subtask.id }}" data-task-title="{{ subtask.title }}"
-                    data-task-body="{{ subtask.body }}"></a>
+                    data-card-id="{{ subcard.id }}" data-card-title="{{ subcard.title }}"
+                    data-card-body="{{ subcard.body }}"></a>
                 </div>
               </div>
-              <!-- End for Subtask -->
+              <!-- End for Subcard -->
               {% endfor %}
-              <!-- End for Task -->
+              <!-- End for card -->
               {% endfor %}
             </div>
           </div>
@@ -282,6 +299,7 @@
                 placeholder="Add Card Title" maxlength="100" required autofocus>
               <!-- hidden input will be updated via javascript -->
               <input type="hidden" name="list_id" value="">
+              <input type="hidden" name="card_id" value="">
               <button type="submit" class="btn btn-primary">Add</button>
             </div>
             <div class="mt-3 border" id="editor" name="body" style="height: 400px">
@@ -301,10 +319,28 @@
             <div class="d-flex gap-3">
               <input type="text" class="form-control flex-grow-1" id="updateCardTitle" name="title"
                 placeholder="Update Card Title" maxlength="100" value="" required>
-              <input type="hidden" name="task_id" value="">
+              <input type="hidden" name="card_id" value="">
               <button type="submit" class="btn btn-primary">Update</button>
             </div>
             <div class="mt-3 border" id="updateEditor" name="body" value="" style="height: 400px">
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- updateListModal -->
+  <div class="modal fade" id="updateListModal" tabindex="-1" aria-labelledby="updateListModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-body">
+          <form id="updateListForm">
+            <div class="d-flex gap-3">
+              <input type="text" class="form-control flex-grow-1" id="updateListTitle" name="title" placeholder="Update List"
+                maxlength="100" required autofocus>
+              <input type="hidden" name="list_id" value="">
+              <button type="submit" class="btn btn-primary">Add</button>
             </div>
           </form>
         </div>

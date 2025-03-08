@@ -3,6 +3,11 @@ document.getElementById('addListModal').addEventListener('shown.bs.modal', funct
   document.getElementById('listTitle').focus();
 });
 
+// focus updatelistmodal input field
+document.getElementById('updateListModal').addEventListener('shown.bs.modal', function () {
+  document.getElementById('updateListTitle').focus();
+});
+
 // focus addcardmodal input field
 document.getElementById('addCardModal').addEventListener('shown.bs.modal', function () {
   document.getElementById('cardTitle').focus();
@@ -23,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 
-//fill addcardmodal hidden list_id with actual list_id
+//fill addcardmodal hidden list_id with actual list_id (and card_id if exists)
 document.addEventListener('DOMContentLoaded', function() {
   // When the addCardModal is about to be shown, update its hidden input
   const addCardModalEl = document.getElementById('addCardModal');
@@ -32,26 +37,47 @@ document.addEventListener('DOMContentLoaded', function() {
     const button = event.relatedTarget;
     // Extract info from data-list-id attribute
     const listId = button.getAttribute('data-list-id');
-    // Update the modal's hidden input value
+    // Update the modal's hidden list-id input value
     addCardModalEl.querySelector('input[name="list_id"]').value = listId;
+    // Update the modal's hidden card-id input value
+    const cardId = button.getAttribute('data-card-id');
+    if (cardId) {
+      addCardModalEl.querySelector('input[name="card_id"]').value = cardId;
+      console.log("Modal opened for card id:", cardId);
+    }
     console.log("Modal opened for list id:", listId);
   });
 });
 
-//fill updatecardmodal hidden task_id with actual task_id and title and body with actual values
+//fill updatecardmodal hidden card_id with actual card_id and title and body with actual values
 document.addEventListener('DOMContentLoaded', function() {
   // When the updateCardModal is about to be shown, update its hidden input
   const updateCardModalEl = document.getElementById('updateCardModal');
   updateCardModalEl.addEventListener('show.bs.modal', function(event) {
     // Button that triggered the modal
     const button = event.relatedTarget;
-    // Extract info from data-task-id attribute
-    const taskId = button.getAttribute('data-task-id');
+    // Extract info from data-card-id attribute
+    const cardId = button.getAttribute('data-card-id');
     // Update the modal's hidden input value
-    updateCardModalEl.querySelector('input[name="task_id"]').value = taskId;
+    updateCardModalEl.querySelector('input[name="card_id"]').value = cardId;
     // Update the modal's title input value
-    updateCardModalEl.querySelector('input[name="title"]').value = button.getAttribute('data-task-title');
-    console.log("Modal opened for task id:", taskId);
+    updateCardModalEl.querySelector('input[name="title"]').value = button.getAttribute('data-card-title');
+    console.log("Modal opened for card id:", cardId);
+  });
+});
+
+//fill updatelistmodal hidden list_id with actual list_id
+document.addEventListener('DOMContentLoaded', function() {
+  // When the updateListModal is about to be shown, update its hidden input
+  const updateListModalEl = document.getElementById('updateListModal');
+  updateListModalEl.addEventListener('show.bs.modal', function(event) {
+    // Button that triggered the modal
+    const button = event.relatedTarget;
+    // Extract info from data-list-id attribute
+    const listId = button.getAttribute('data-list-id');
+    // Update the modal's hidden input value
+    updateListModalEl.querySelector('input[name="list_id"]').value = listId;
+    console.log("Modal opened for list id:", listId);
   });
 });
 
@@ -231,22 +257,21 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
-
 // Update Card Options
 document.addEventListener('DOMContentLoaded', function() {
-  const taskActionItems = document.querySelectorAll('.dropdown-item.task-action');
+  const cardActionItems = document.querySelectorAll('.dropdown-item.card-action');
 
-  taskActionItems.forEach(item => {
+  cardActionItems.forEach(item => {
     item.addEventListener('click', function(event) {
       event.preventDefault(); // Prevent the default anchor behavior
 
-      // Retrieve task id and action from the clicked element
-      const taskId = this.getAttribute('data-task-id');
+      // Retrieve card id and action from the clicked element
+      const cardId = this.getAttribute('data-card-id');
       const action = this.getAttribute('data-action');
-      console.log("Task ID:", taskId, "Action:", action);
+      console.log("card ID:", cardId, "Action:", action);
 
       // Send data to the Flask endpoint using fetch API
-      fetch(`/card/${taskId}`, { // Adjust the endpoint as needed
+      fetch(`/card/${cardId}`, { // Adjust the endpoint as needed
         method: 'PUT',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
@@ -260,12 +285,12 @@ document.addEventListener('DOMContentLoaded', function() {
         return response.json();
       })
       .then(data => {
-        console.log("Task updated:", data);
+        console.log("card updated:", data);
         // Optionally, update the UI or force a page reload:
         location.reload();
       })
       .catch(error => {
-        console.error("Error updating task:", error);
+        console.error("Error updating card:", error);
       });
     });
   });
@@ -277,7 +302,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   updateCardForm.addEventListener('submit', function(event) {
     event.preventDefault(); // Prevent default form submission
-    const taskId = updateCardForm.querySelector('input[name="task_id"]').value;
+    const cardId = updateCardForm.querySelector('input[name="card_id"]').value;
     // Gather form data
     const formData = new FormData(updateCardForm);
     // Append the card description from Quill's editor content
@@ -291,7 +316,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Send form data to your API endpoint for updating a card
-    fetch(`/card/${taskId}`, {
+    fetch(`/card/${cardId}`, {
       method: 'PUT',
       body: formData
     })
@@ -321,7 +346,46 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 
+// Update List Title
+document.addEventListener('DOMContentLoaded', function() {
+  const updateListForm = document.getElementById('updateListForm');
 
+  updateListForm.addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent default form submission
+    const listId = updateListForm.querySelector('input[name="list_id"]').value;
+    // Gather form data
+    const formData = new FormData(updateListForm);
+
+    // Send form data to your API endpoint for updating a list
+    fetch(`/list/${listId}`, {
+      method: 'POST',
+      body: formData
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error("Network response was not OK");
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log("List updated successfully:", data);
+      // Hide the modal after a successful submission
+      const modalEl = document.getElementById('updateListModal');
+      const modalInstance = bootstrap.Modal.getInstance(modalEl);
+      if (modalInstance) {
+        modalInstance.hide();
+      } else {
+        // If no instance exists, create one and then hide it
+        new bootstrap.Modal(modalEl).hide();
+      }
+      location.reload(); // Reload the page to update the card list
+    })
+    .catch(error => {
+      console.error("Error submitting list form:", error);
+      // Optionally, display an error message to the user
+    });
+  });
+});
 
 
 // Quill Text Editor
@@ -347,10 +411,10 @@ document.addEventListener('DOMContentLoaded', function() {
   updateModalEl.addEventListener('show.bs.modal', function(event) {
     // The button that triggered the modal
     const button = event.relatedTarget;
-    const taskBody = button.getAttribute('data-task-body') || '';
+    const cardBody = button.getAttribute('data-card-body') || '';
     // Use Quill's clipboard API to insert HTML content
-    if (taskBody !== 'None'){
-      updateQuill.clipboard.dangerouslyPasteHTML(taskBody);
+    if (cardBody !== 'None'){
+      updateQuill.clipboard.dangerouslyPasteHTML(cardBody);
     }
     else{
       updateQuill.clipboard.dangerouslyPasteHTML('');
