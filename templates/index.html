@@ -20,7 +20,7 @@
     <nav class="navbar bg-body-tertiary p-0 sticky-top">
       <div class="container-fluid px-2">
         <!-- Todo: Menu für andere Projekte und Archiv -->
-        <button class="navbar-toggler btn btn-secondary  me-2">
+        <button class="navbar-toggler btn btn-secondary me-2">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list"
             viewBox="0 0 16 16">
             <path fill-rule="evenodd"
@@ -53,6 +53,7 @@
       <!-- Start list lane -->
       <!-- For Schleife zum durchlaufen der Listen -->
       {% for list in lists %}
+      <!-- Todo: col-6 oder col-12 für mobil? -->
       <div class="col-12 col-lg-4">
         <div class="card mb-2">
           <div class="card-header bg-light d-flex justify-content-between align-items-center py-1 px-2">
