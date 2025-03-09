@@ -1,7 +1,7 @@
+/* Dropdown menu  z-index correction */
 .dropdown-toggle::after {
   display: none;
 }
-
 
 .card .stretched-link {
   /* Lower the stacking order */
