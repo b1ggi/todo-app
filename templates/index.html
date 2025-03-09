@@ -1,7 +1,6 @@
 <!doctype html>
-<!-- Todo: Dark Mode Toggle im Menü -->
  <!-- Todo: px mit rem ersetzen -->
-<html lang="en" data-bs-theme="dark">
+<html lang="en" data-bs-theme="light">
 
 <head>
   <meta charset="utf-8">
@@ -15,12 +14,11 @@
 </head>
 
 <body class="bg-body-secondary">
-
   <!-- Todo: Tooltips für Alarme mit Toast? -->
   <div class="container">
 
-    <nav class="navbar bg-body-tertiary p-0 sticky-top">
-      <div class="container-fluid px-2">
+    <nav class="navbar bg-body-secondary p-0 sticky-top ">
+      <div class="container-fluid px-0">
         <!-- Menu für andere Projekte und Archiv und Settings-->
         <button class="navbar-toggler btn btn-secondary me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list"
@@ -43,8 +41,8 @@
           </svg>
         </button>
         <!-- Todo: Search -->
-        <form class="d-flex ms-auto" role="search">
-          <input class="form-control  my-1 " type="search" name="search" id="search" placeholder="Search"
+        <form class="d-flex ms-auto col-6 col-lg-3" style="padding-left: 0.75rem;" role="search">
+          <input class="form-control  my-1" type="search" name="search" id="search" placeholder="Search"
             aria-label="Search">
         </form>
       </div>
@@ -351,7 +349,7 @@
     </div>
   </div>
 
-  <!-- Todo: Navbar offcanvas -->
+  <!-- Todo: offcanvas weitermachen -->
   <div class="offcanvas offcanvas-start" style="width: 300px;" tabindex="-1" id="offcanvasNavbar"
     aria-labelledby="offcanvasNavbarLabel">
     <div class="offcanvas-header">
@@ -389,6 +387,7 @@
   </div>
 
   <!-- Settings Modal -->
+   <!-- Todo: col-6/col-12 setting, vielleicht allgemein column setting? -->
   <div class="modal fade" id="settingsModal" tabindex="-1" aria-labelledby="settingsModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -398,7 +397,6 @@
         <div class="modal-body d-flex justify-content-center align-items-center">
           <p class="mb-0 me-2">Dark Mode</p>
           <div class="btn-group ms-auto" role="group">
-            <!-- Todo: active -->
             <button type="button" id="lightModeBtn"
               class="btn btn-outline-secondary btn-sm d-flex align-items-center justify-content-center"><svg
                 xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"

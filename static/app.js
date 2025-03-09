@@ -20,6 +20,7 @@ function getCookie(cname) {
   return "";
 }
 
+// Theme toggle
 document.addEventListener('DOMContentLoaded', function () {
   // Read saved theme from cookie (expected values: "dark", "light", "auto")
   let theme = getCookie("theme");
