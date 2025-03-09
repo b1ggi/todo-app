@@ -1,7 +1,9 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 
 db = SQLAlchemy()
+migrate = Migrate()
 
 from app.helpers import init_db
 
@@ -10,6 +12,9 @@ def create_app():
     app = Flask(__name__, template_folder='../templates', static_folder='../static')
     app.config.from_object('config.Config')  # aus separater Konfig-Datei
     db.init_app(app)
+    migrate.init_app(app, db)
+    # Alle Models importieren für Migration
+    from app import models
 
     with app.app_context():
         init_db()  # Initialisierung der Datenbank

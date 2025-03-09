@@ -1,11 +1,7 @@
-html, body {
-    background: #e9ecef;
-  }
-
+/* Dropdown menu  z-index correction */
 .dropdown-toggle::after {
   display: none;
 }
-
 
 .card .stretched-link {
   /* Lower the stacking order */
@@ -22,4 +18,9 @@ html, body {
 .card .dropdown-menu {
   /* Ensure dropdowns are above the stretched link */
   z-index: 3;
+}
+
+/* Quill Placeholder dark mode support */
+html[data-bs-theme="dark"] .ql-editor.ql-blank::before {
+  color: #ccc; /* A lighter color for dark backgrounds */
 }

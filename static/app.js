@@ -1,3 +1,91 @@
+// Helper: Set a cookie with expiration in days
+function setCookie(cname, cvalue, exdays) {
+  const d = new Date();
+  d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+  const expires = "expires=" + d.toUTCString();
+  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+
+// Helper: Get the cookie by name
+function getCookie(cname) {
+  const name = cname + "=";
+  const decodedCookie = decodeURIComponent(document.cookie);
+  const ca = decodedCookie.split(';');
+  for (let i = 0; i < ca.length; i++) {
+    let c = ca[i].trim();
+    if (c.indexOf(name) === 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  // Read saved theme from cookie (expected values: "dark", "light", "auto")
+  let theme = getCookie("theme");
+  if (theme === "dark" || theme === "light") {
+    document.documentElement.setAttribute("data-bs-theme", theme);
+  } else {
+    // For auto, follow system preferences
+    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    document.documentElement.setAttribute("data-bs-theme", prefersDark ? "dark" : "light");
+    theme = "auto";
+  }
+  
+  // Button references
+  const darkBtn = document.querySelector("#darkModeBtn");
+  const autoBtn = document.querySelector("#autoModeBtn");
+  const lightBtn = document.querySelector("#lightModeBtn");
+
+  // Reset active state on all theme buttons
+  [darkBtn, autoBtn, lightBtn].forEach(btn => {
+      if(btn) { btn.classList.remove("active"); }
+  });
+  
+  // Set active class for the button corresponding to the saved theme
+  if (theme === "dark" && darkBtn) {
+    darkBtn.classList.add("active");
+  } else if (theme === "light" && lightBtn) {
+    lightBtn.classList.add("active");
+  } else if (theme === "auto" && autoBtn) {
+    autoBtn.classList.add("active");
+  }
+
+  // Theme toggle event listeners
+  if (darkBtn) {
+    darkBtn.addEventListener("click", function () {
+      document.documentElement.setAttribute("data-bs-theme", "dark");
+      setCookie("theme", "dark", 7);
+      // Update active classes
+      darkBtn.classList.add("active");
+      if(autoBtn) autoBtn.classList.remove("active");
+      if(lightBtn) lightBtn.classList.remove("active");
+    });
+  }
+  if (lightBtn) {
+    lightBtn.addEventListener("click", function () {
+      document.documentElement.setAttribute("data-bs-theme", "light");
+      setCookie("theme", "light", 7);
+      // Update active classes
+      lightBtn.classList.add("active");
+      if(autoBtn) autoBtn.classList.remove("active");
+      if(darkBtn) darkBtn.classList.remove("active");
+    });
+  }
+  if (autoBtn) {
+    autoBtn.addEventListener("click", function () {
+      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      document.documentElement.setAttribute("data-bs-theme", prefersDark ? "dark" : "light");
+      setCookie("theme", "auto", 7);
+      // Update active classes
+      autoBtn.classList.add("active");
+      if(darkBtn) darkBtn.classList.remove("active");
+      if(lightBtn) lightBtn.classList.remove("active");
+    });
+  }
+});
+
+
 // focus addlistmodal input field
 document.getElementById('addListModal').addEventListener('shown.bs.modal', function () {
   document.getElementById('listTitle').focus();
