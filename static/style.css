@@ -1,3 +1,14 @@
+/* Smooth loading */
+body {
+  display: none;
+  animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
 /* Dropdown menu  z-index correction */
 .dropdown-toggle::after {
   display: none;
@@ -23,4 +34,46 @@
 /* Quill Placeholder dark mode support */
 html[data-bs-theme="dark"] .ql-editor.ql-blank::before {
   color: #ccc; /* A lighter color for dark backgrounds */
+}
+
+html {
+  overflow-x: hidden;
+}
+
+/* Navbar Hack */
+#mainNav {
+  transition: all 0.3s ease-in-out;
+  background-color: #3f444d; /* Or your preferred color */
+  /* Ensure proper z-index */
+  z-index: 1030;
+  will-change: transform, opacity;
+}
+
+.navbar-scrolled {
+  opacity: 0.8;
+  transform: translateY(-250%);
+}
+
+.navbar-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* iOS-specific fixes */
+.navbar-fixed-top {
+  backface-visibility: hidden;
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  -webkit-transform: translateZ(0);
+}
+
+/* Fix for touch-action on iOS */
+#mainNav {
+  touch-action: manipulation;
+}
+
+/* Improve touch responsiveness */
+#mainNav a, #mainNav button {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
