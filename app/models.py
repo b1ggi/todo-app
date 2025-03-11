@@ -52,3 +52,4 @@ class Card(db.Model):
     parent   = db.relationship('Card', back_populates='subcards', remote_side=[id])
     subcards = db.relationship('Card', back_populates='parent', lazy='select')
     done = db.Column(db.Boolean, default=False)
+    
