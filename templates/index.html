@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en" data-bs-theme="light" style="touch-action: pan-y;">
-<!-- Todo: reload without refresh -->
- <!-- Todo: badge wenn eingeklappt -->
+<!-- Todo: reload ohne refresh, flicker beim refreshen -->
+  <!-- Todo: Editor aufgabenliste wie nextcloud dock -->
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -45,7 +45,7 @@
         <!-- Todo: Search -->
         <form class="d-flex ms-auto col-6 col-lg-3" style="padding-left: 0.5rem;" role="search">
           <input class="form-control  my-1" type="search" name="search" id="search" placeholder="Search"
-            aria-label="Search">
+            aria-label="Search" required>
         </form>
       </div>
     </nav>
@@ -59,19 +59,28 @@
       <div class="col-6 col-lg-4 col-xl-3 col-xxl-2 column-setting mt-2 column">
         <div class="card bg-body-secondary">
           <div class="card-header d-flex justify-content-between align-items-center py-1 px-2 bg-body">
-            <h3 class="card-title h6 mb-0 text-truncate">
+            <h3 class="card-title h6 mb-0 text-truncate me-auto">
               <!-- $Listentitel änderbar -->
               <a href="#" class="text-reset text-decoration-none" data-bs-toggle="modal" data-bs-target="#updateListModal"
               data-list-id="{{ list.id }}" data-list-title="{{ list.title }}">{{ list.title }}</a>
             </h3>
+            
             <div class="btn-group">
+              <button type="button" class="btn btn-sm border-0 disabled">
+                
+              </button>
               <!-- Collapse  -->
               <button type="button" class="btn btn-outline-secondary btn-sm border-0" data-bs-toggle="collapse"
-                data-bs-target="#collapse{{ list.id }}" aria-expanded="false" aria-controls="collapse{{ list.id }}">
+                data-bs-target="#collapse{{ list.id }}" aria-expanded="{% if not list.collapsed %}true{% else %}false{% endif %}" aria-controls="collapse{{ list.id }}">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                   class="bi bi-caret-down" viewBox="0 0 16 16">
                   <path
                     d="M3.204 5h9.592L8 10.481zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659" />
+                    <span class="collapsed-number {% if list.collapsed %}visible{% endif %}">
+                      {% set collapsed_cards = list.cards | selectattr("archived", "equalto", False) |  list | length %}
+                      {{ collapsed_cards }}
+                      <span class="visually-hidden">collapsed cards</span>
+                    </span>
                 </svg>
               </button>
 
