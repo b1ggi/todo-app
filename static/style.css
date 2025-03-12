@@ -1,13 +1,17 @@
 /* Smooth loading */
-body {
-  display: none;
-  animation: fadeIn 0.5s ease-in;
+html[data-bs-theme="dark"] body {
+  background-color: #121212; /* oder eine andere dunkle Farbe */
 }
 
-@keyframes fadeIn {
-  0% { opacity: 0; }
-  100% { opacity: 1; }
+body {
+  opacity: 0;
+  transition: opacity 0.5s ease-in;
 }
+
+body.visible {
+  opacity: 1;
+}
+
 
 /* Dropdown menu  z-index correction */
 .dropdown-toggle::after {
@@ -43,7 +47,7 @@ html {
 /* Navbar Hack */
 #mainNav {
   transition: all 0.3s ease-in-out;
-  background-color: #3f444d; /* Or your preferred color */
+  background-color: #020202; /* Or your preferred color */
   /* Ensure proper z-index */
   z-index: 1030;
   will-change: transform, opacity;
@@ -76,4 +80,37 @@ html {
 #mainNav a, #mainNav button {
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
+}
+
+
+/* Apply a transition to the icon */
+button[data-bs-toggle="collapse"] svg {
+  transition: transform 0.3s ease;
+}
+
+/* When the button is collapsed, no rotation */
+button[data-bs-toggle="collapse"][aria-expanded="false"] svg {
+  transform: rotate(-180deg) translateY(-0.2rem);
+}
+
+/* When expanded (i.e. not collapsed), rotate the icon 180 degrees */
+button[data-bs-toggle="collapse"][aria-expanded="true"] svg {
+  transform: rotate(0deg);
+}
+
+/* collapse count number position and styling */
+.collapsed-number {
+  position: absolute;
+  top: -0.15rem;       /* Adjust as needed */
+  left: 50%;     /* Adjust as needed */
+  transform: translateX(-50%);
+  font-size: 0.7rem;
+  /* No background, no padding, just plain text styling */
+  color: #007bff;     /* or your preferred text color */
+  opacity: 0;          /* hidden state */
+  transition: opacity 0.2s ease-in-out;
+
+}
+.collapsed-number.visible {
+  opacity: 1;          /* visible state */
 }

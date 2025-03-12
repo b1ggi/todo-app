@@ -1,6 +1,11 @@
 let quill;
 let updateQuill;
 
+window.addEventListener("load", function() {
+  document.body.classList.add("visible");
+});
+
+
 // Helper: Set a cookie with expiration in days
 function setCookie(cname, cvalue, exdays) {
   const d = new Date();
@@ -25,8 +30,7 @@ function getCookie(cname) {
 
 //DOMCONTENTCLOADED
 document.addEventListener("DOMContentLoaded", function () {
-  document.body.style.display = 'block';
-  
+
   // THEME TOGGLE
   // Read saved theme from cookie (expected values: "dark", "light", "auto")
   let theme = getCookie("theme");
@@ -321,6 +325,29 @@ updateStatusBarStyle(finalTheme);
     });
   });
 
+    // COLLAPSE ELEMENTS NUMBER BADGE UND IOS FIX
+    // Select all collapse elements (adjust the selector as needed) 
+    const collapseButtons = document.querySelectorAll('button[data-bs-toggle="collapse"]');
+    collapseButtons.forEach(function(btn) {
+      function blurAndToggle() {
+        btn.blur(); // remove focus
+        setTimeout(function(){
+          const num = btn.querySelector('.collapsed-number');
+          if (btn.getAttribute("aria-expanded") === "false") {
+            if(num) num.classList.add("visible");
+          } else {
+            if(num) num.classList.remove("visible");
+          }
+        }, 350); // adjust based on your collapse animation
+      }
+    
+      btn.addEventListener("click", blurAndToggle);
+      btn.addEventListener("touchend", blurAndToggle);
+    });
+
+
+    
+
   // ADD NEW LIST
   // Get references to the input and form
   const inputElement = document.getElementById("listTitle");
@@ -334,7 +361,11 @@ updateStatusBarStyle(finalTheme);
 
   // Handle form submission
   form.addEventListener("submit", function (event) {
+    if (inputElement.value.trim() === "") {
     event.preventDefault(); // Prevent default form submission
+    new bootstrap.Tooltip(inputElement, {title: "Meeeeep.", placement: "bottom"}).show();
+    return;
+    }
 
     // Gather form data
     const formData = new FormData(form);
@@ -375,6 +406,17 @@ updateStatusBarStyle(finalTheme);
 
   addCardForm.addEventListener("submit", function (event) {
     event.preventDefault(); // Prevent default form submission
+
+  // check empty, Get and trim the card title value
+  const cardTitleInput = document.getElementById("cardTitle");
+  const cardTitle = cardTitleInput.value.trim();
+
+  // Check if the input is empty
+  if (cardTitle === "") {
+    new bootstrap.Tooltip(cardTitleInput, {title: "Möööp.", placement: "bottom"}).show();
+    // alert("mööp.");
+    return; // Stop further execution
+  }
 
     // Gather form data
     const formData = new FormData(addCardForm);
@@ -460,8 +502,18 @@ updateStatusBarStyle(finalTheme);
   const updateCardForm = document.getElementById("updateCardForm");
 
   updateCardForm.addEventListener("submit", function (event) {
+
     event.preventDefault(); // Prevent default form submission
     const cardId = updateCardForm.querySelector('input[name="card_id"]').value;
+    const cardTitle = updateCardForm.querySelector('input[name="title"]').value;
+
+    // Check if the input is empty
+    if (cardTitle.trim() === "") {
+      new bootstrap.Tooltip(updateCardForm.querySelector('input[name="title"]'), {title: "Nein.", placement: "bottom"}).show();
+      // alert("mööp.");
+      return; // Stop further execution
+    }
+
     // Gather form data
     const formData = new FormData(updateCardForm);
     // Append the card description from Quill's editor content
@@ -509,6 +561,13 @@ updateStatusBarStyle(finalTheme);
   updateListForm.addEventListener("submit", function (event) {
     event.preventDefault(); // Prevent default form submission
     const listId = updateListForm.querySelector('input[name="list_id"]').value;
+    const listTitle = updateListForm.querySelector('input[name="title"]').value;
+    // Check if the input is empty
+    if (listTitle.trim() === "") {
+      new bootstrap.Tooltip(updateListForm.querySelector('input[name="title"]'), {title: "...nein", placement: "bottom"}).show();
+      // alert("mööp.");
+      return; // Stop further execution
+    }
     // Gather form data
     const formData = new FormData(updateListForm);
 
