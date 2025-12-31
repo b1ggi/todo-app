@@ -59,7 +59,7 @@ docker run -d --name todo-app -v data:/app/instance -p 5000:5000 ghcr.io/b1ggi/t
 
 ## ✨ Application Features
 
-🚧 **Under Heavy Development!** 🚧
+🚧 **Under Heavy Development!!** 🚧
 
 Stay tuned for more updates and features coming soon!
 
